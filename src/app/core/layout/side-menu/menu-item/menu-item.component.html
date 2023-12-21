@@ -1,0 +1,33 @@
+@if (hasChildren) {
+    @if (depth === 0) {
+        <!-- root node -->
+        <a mat-list-item [routerLink]="menuItem.url" [matMenuTriggerFor]="childMenu">
+            <mat-icon fontIcon="{{menuItem.icon}}"></mat-icon>
+        </a>
+    } @else {
+        <!-- branch node -->
+        <a mat-menu-item [routerLink]="menuItem.url" [matMenuTriggerFor]="childMenu">
+            <span>{{ menuItem.name }}</span>
+        </a>
+    }
+    <mat-menu #childMenu="matMenu">
+        @for (item of menuItem.children;track $index) {
+            <app-menu-item [menuItem]="item" [depth]="depth+1"></app-menu-item>
+        }
+    </mat-menu>
+
+} @else {
+    @if (depth === 0) {
+        <!-- root node -->
+        <a mat-list-item [routerLink]="menuItem.url">
+            <mat-icon fontIcon="{{menuItem.icon}}"></mat-icon>
+        </a>
+    } @else {
+        <!-- leaf node   -->
+        <a mat-menu-item [routerLink]="menuItem.url">
+            <span>{{ menuItem.name }}</span>
+        </a>
+    }
+
+}
+

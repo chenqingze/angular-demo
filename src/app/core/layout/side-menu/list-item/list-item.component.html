@@ -1,0 +1,20 @@
+@if (menuItem.isShownInMenu) {
+    @if (hasChildren) {
+        <a mat-list-item (click)="isExpanded=!isExpanded" [attr.aria-label]="'Toggle ' + menuItem.name">
+            <mat-icon>{{ menuItem.icon }}</mat-icon>
+            <span>{{ menuItem.name }}</span>
+        </a>
+        @if (isExpanded) {
+            @for (item of  menuItem.children;track $index) {
+                <app-list-item [menuItem]="item" [depth]="depth+1"></app-list-item>
+            }
+        }
+    } @else {
+        <a mat-list-item [routerLink]="menuItem.url">
+            @if (menuItem.icon) {
+                <mat-icon fontIcon="{{menuItem.icon}}"></mat-icon>
+            }
+            <span>{{ menuItem.name }}</span>
+        </a>
+    }
+}

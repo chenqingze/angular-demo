@@ -1,0 +1,61 @@
+:host {
+  height: 100%;
+  display: flex;
+  background-color: #fff;
+  padding: 0;
+  /*左右居中*/
+  justify-content: center;
+  /*上下居中*/
+  align-items: center;
+
+
+  section {
+    width: 100%;
+
+    form {
+      max-width: 420px;
+      margin-left: auto;
+      margin-right: auto;
+      padding-top: 0.5rem;
+
+      .login-logo, h2 {
+        text-align: center;
+      }
+
+      h2 {
+        font-size: 20px;
+        font-weight: 400;
+        line-height: 36px;
+      }
+
+      mat-form-field {
+        display: block;
+      }
+
+
+      a[type=submit] {
+        width: 100%;
+        line-height: normal;
+        padding: 0.75rem 1rem;
+        height: 3rem;
+        font-size: 1rem;
+      }
+
+      .remember-me-checkbox {
+        float: left;
+        margin-top: 0.5rem;
+      }
+
+      .forget-passwd-link {
+        float: right;
+        margin-top: 0.5rem;
+        display: inline-block;
+        vertical-align: middle;
+        line-height: 3rem;
+      }
+
+
+    }
+  }
+}
+

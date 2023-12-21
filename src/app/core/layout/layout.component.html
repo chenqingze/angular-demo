@@ -1,0 +1,26 @@
+<div class="admin-container-wrap">
+    <mat-sidenav-container class="admin-container">
+        <mat-sidenav #sidenav [mode]="mobileQuery.matches ? 'over' : 'side'"
+                     [opened]="!mobileQuery.matches"
+                     [fixedInViewport]="mobileQuery.matches" fixedTopGap="56">
+            <h2>幸福商店</h2>
+            <mat-divider></mat-divider>
+            <mat-nav-list>
+                <app-side-menu [isMiniNavigation]="mobileQuery.matches"></app-side-menu>
+            </mat-nav-list>
+        </mat-sidenav>
+
+        <mat-sidenav-content class="admin-content">
+            <mat-toolbar color="primary" class="example-toolbar">
+                <button mat-icon-button (click)="sidenav.toggle()">
+                    <mat-icon>menu</mat-icon>
+                </button>
+                <h1 class="example-app-name">Responsive App</h1>
+            </mat-toolbar>
+
+            <p>content</p>
+            <router-outlet></router-outlet>
+        </mat-sidenav-content>
+
+    </mat-sidenav-container>
+</div>

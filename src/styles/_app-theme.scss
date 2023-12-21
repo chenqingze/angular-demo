@@ -1,0 +1,67 @@
+@use '@angular/material' as mat;
+@use 'sass:map';
+
+// 自定义主题样式部分
+@mixin theme($theme) {
+  $primary: map.get($theme, primary);
+  $accent: map.get($theme, accent);
+  $warn: map.get($theme, warn);
+  $background: map.get($theme, background);
+  $foreground: map.get($theme, foreground);
+  $next-theme: mat.define-palette(mat.$red-palette);
+
+  /* .docs-app-background {
+     background: mat.get-color-from-palette($background, background);
+   }
+
+   .docs-primary-header {
+     background: mat.get-color-from-palette($primary);
+
+     h1 {
+       color: mat.get-color-from-palette($primary, default-contrast);
+     }
+   }
+
+   .docs-footer {
+     background: mat.get-color-from-palette($primary);
+     color: mat.get-color-from-palette($primary, default-contrast);
+   }
+
+   .docs-help-support {
+     color: mat.get-color-from-palette($foreground, secondary-text);
+
+     a {
+       color: mat.get-color-from-palette($foreground, text);
+     }
+   }
+
+   .is-next-version {
+     background: mat.get-color-from-palette($next-theme, 900) !important;
+   }
+
+   @include carousel-theme.theme($theme);
+   @include component-category-list-theme.theme($theme);
+   @include component-sidenav-theme.theme($theme);
+   @include component-viewer-theme.theme($theme);
+   @include api-theme.theme($theme);
+   @include markdown-theme.theme($theme);
+   @include svg-theme.theme($theme);
+   @include tables-theme.theme($theme);
+   @include example-viewer-theme.theme($theme);
+   @include footer-theme.theme($theme);
+   @include guide-list-theme.theme($theme);
+   @include homepage-theme.theme($theme);
+   @include not-found-theme.theme($theme);
+   @include navbar-theme.theme($theme);
+   @include table-of-contents-theme.theme($theme);
+   @include cookie-popup-theme.theme($theme);*/
+}
+
+html, body {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+}

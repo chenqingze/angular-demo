@@ -1,0 +1,9 @@
+@if (isMiniNavigation) {
+    @for (menuItem of menu;track $index) {
+        <app-menu-item [menuItem]="menuItem"></app-menu-item>
+    }
+} @else {
+    @for (menuItem of menu;track $index) {
+        <app-list-item [menuItem]="menuItem"></app-list-item>
+    }
+}
