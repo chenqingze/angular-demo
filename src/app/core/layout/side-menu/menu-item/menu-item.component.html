@@ -1,15 +1,14 @@
 @if (hasChildren) {
-    @if (depth === 0) {
+    <a mat-list-item [routerLink]="menuItem.url" [matMenuTriggerFor]="childMenu">
         <!-- root node -->
-        <a mat-list-item [routerLink]="menuItem.url" [matMenuTriggerFor]="childMenu">
+        @if (depth == 0) {
             <mat-icon fontIcon="{{menuItem.icon}}"></mat-icon>
-        </a>
-    } @else {
-        <!-- branch node -->
-        <a mat-menu-item [routerLink]="menuItem.url" [matMenuTriggerFor]="childMenu">
+        } @else {
+            <!-- branch node -->
             <span>{{ menuItem.name }}</span>
-        </a>
-    }
+        }
+
+    </a>
     <mat-menu #childMenu="matMenu">
         @for (item of menuItem.children;track $index) {
             <app-menu-item [menuItem]="item" [depth]="depth+1"></app-menu-item>
@@ -17,17 +16,14 @@
     </mat-menu>
 
 } @else {
-    @if (depth === 0) {
-        <!-- root node -->
-        <a mat-list-item [routerLink]="menuItem.url">
+    <a mat-list-item [routerLink]="menuItem.url">
+        @if (depth == 0) {
+            <!-- root node -->
             <mat-icon fontIcon="{{menuItem.icon}}"></mat-icon>
-        </a>
-    } @else {
-        <!-- leaf node   -->
-        <a mat-menu-item [routerLink]="menuItem.url">
+        } @else {
+            <!-- leaf node   -->
             <span>{{ menuItem.name }}</span>
-        </a>
-    }
+        }
+    </a>
 
 }
-

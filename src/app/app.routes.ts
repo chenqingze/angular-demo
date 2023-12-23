@@ -3,7 +3,6 @@ import {PageNotFoundComponent} from './shared/components/page-not-found/page-not
 import {LoginComponent} from './routes/auth/login/login.component';
 import {RegisterComponent} from './routes/auth/register/register.component';
 import {DashboardComponent} from './routes/dashboard/dashboard.component';
-import {appGuard} from './core/guards/app.guard';
 import {authGuard} from './core/guards/auth.guard';
 import {LayoutComponent} from './core/layout/layout.component';
 
@@ -11,7 +10,7 @@ export const routes: Routes = [
 
     {
         path: '', component: LayoutComponent,
-        canActivate: [appGuard],
+        // canActivate: [appGuard],
         children: [
             {path: '', redirectTo: 'dashboard', pathMatch: 'full'},
             {path: 'dashboard', component: DashboardComponent},

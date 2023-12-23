@@ -3,11 +3,7 @@
         <mat-sidenav #sidenav [mode]="mobileQuery.matches ? 'over' : 'side'"
                      [opened]="!mobileQuery.matches"
                      [fixedInViewport]="mobileQuery.matches" fixedTopGap="56">
-            <h2>幸福商店</h2>
-            <mat-divider></mat-divider>
-            <mat-nav-list>
-                <app-side-menu [isMiniNavigation]="mobileQuery.matches"></app-side-menu>
-            </mat-nav-list>
+            <app-sidebar [isMobile]="mobileQuery.matches"></app-sidebar>
         </mat-sidenav>
 
         <mat-sidenav-content class="admin-content">

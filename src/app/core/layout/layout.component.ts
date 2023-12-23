@@ -8,6 +8,7 @@ import {MatIconModule} from '@angular/material/icon';
 import {MatButtonModule} from '@angular/material/button';
 import {SideMenuComponent} from './side-menu/side-menu.component';
 import {BreadcrumbComponent} from '../../shared/components/breadcrumb/breadcrumb.component';
+import {SidebarComponent} from './sidebar/sidebar.component';
 
 @Component({
     selector: 'app-layout',
@@ -21,7 +22,8 @@ import {BreadcrumbComponent} from '../../shared/components/breadcrumb/breadcrumb
         MatButtonModule,
         SideMenuComponent,
         RouterOutlet,
-        BreadcrumbComponent
+        BreadcrumbComponent,
+        SidebarComponent
     ],
     templateUrl: './layout.component.html',
     styleUrl: './layout.component.scss'

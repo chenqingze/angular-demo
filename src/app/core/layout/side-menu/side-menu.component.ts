@@ -29,4 +29,7 @@ export class SideMenuComponent {
     @Input() isMiniNavigation: boolean = false;
     menu: MenuItem[] = menuList || [];
 
+    hasChildren(menuItem: MenuItem): boolean {
+        return !!menuItem.children && menuItem.children?.length > 0;
+    }
 }

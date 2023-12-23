@@ -2,10 +2,10 @@ import {MenuItem, MenuType} from "../../../shared/models/menu-item";
 
 export const menuList: MenuItem[] = [
     {
-        'name': '首页',
+        'name': '运营概况',
         'permit': 'dashboard',
         'cached': false,
-        'icon': 'home',
+        'icon': 'dashboard',
         'enabled': true,
         'url': 'dashboard',
         'target': '_self',
@@ -18,7 +18,8 @@ export const menuList: MenuItem[] = [
         'name': '订单管理',
         'permit': 'order_module',
         'cached': false,
-        'icon': 'home', 'enabled': true,
+        'icon': 'move_to_inbox',
+        'enabled': true,
         'url': '',
         'target': '_self',
         'type': MenuType.MODULE,
@@ -135,7 +136,8 @@ export const menuList: MenuItem[] = [
         'name': '商品管理',
         'permit': 'product_module',
         'cached': false,
-        'icon': 'home', 'enabled': true,
+        'icon': 'sell',
+        'enabled': true,
         'url': '',
         'target': '_self',
         'type': MenuType.MODULE,
@@ -186,7 +188,8 @@ export const menuList: MenuItem[] = [
         'name': '客户管理',
         'permit': 'product_module',
         'cached': false,
-        'icon': 'home', 'enabled': true,
+        'icon': 'person',
+        'enabled': true,
         'url': '',
         'target': '_self',
         'type': MenuType.MODULE,
@@ -277,7 +280,8 @@ export const menuList: MenuItem[] = [
         'name': '系统管理',
         'permit': 'system_module',
         'cached': false,
-        'icon': 'home', 'enabled': true,
+        'icon': 'settings',
+        'enabled': true,
         'url': '',
         'target': '_self',
         'type': MenuType.MODULE,
@@ -321,53 +325,5 @@ export const menuList: MenuItem[] = [
                 'children': []
             }
         ]
-    },
-    {
-        'name': '餐桌管理',
-        'permit': 'diningtable:read',
-        'cached': false,
-        'icon': 'home', 'enabled': true,
-        'url': '/dining-tables',
-        'target': '_self',
-        'type': MenuType.PAGE,
-        'displayOrder': 100,
-        'isShownInMenu': true,
-        'children': []
-    },
-    {
-        'name': '外卖管理',
-        'permit': 'takeout:read',
-        'cached': false,
-        'icon': 'home', 'enabled': true,
-        'url': '/takeout/index',
-        'target': '_self',
-        'type': MenuType.PAGE,
-        'displayOrder': 100,
-        'isShownInMenu': true,
-        'children': []
-    },
-    {
-        'name': '预订管理',
-        'permit': 'reservation:read',
-        'cached': false,
-        'icon': 'home', 'enabled': true,
-        'url': '/reservation/index',
-        'target': '_self',
-        'type': MenuType.PAGE,
-        'displayOrder': 100,
-        'isShownInMenu': true,
-        'children': []
-    },
-    {
-        'name': '我的个人信息',
-        'permit': 'reservation:read',
-        'cached': false,
-        'icon': 'home', 'enabled': true,
-        'url': '/myprofile',
-        'target': '_self',
-        'type': MenuType.PAGE,
-        'displayOrder': 100,
-        'isShownInMenu': true,
-        'children': []
     },
 ];
