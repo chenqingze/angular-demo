@@ -1,10 +1,3 @@
-<div class="sidebar-header">
-    @if (!isMobile) {
-        <span>幸福商店</span>
-    }
-    <mat-slide-toggle class="mini-navigation-toggle" [checked]="isMobile" (change)="isMobile=!isMobile">
-    </mat-slide-toggle>
-</div>
 <mat-nav-list>
-    <app-side-menu [isMiniNavigation]="isMobile"></app-side-menu>
+    <app-side-menu [isMiniNavigation]="isMiniNavigation"></app-side-menu>
 </mat-nav-list>

@@ -1,1 +1,56 @@
-<p>category-list works!</p>
+<form #categoriesForm="ngForm" (ngSubmit)="onSubmit()">
+    <div class="button-container">
+        <button mat-raised-button type="button" (click)="addCategory()" class="button">
+            添加分类
+        </button>
+    </div>
+    <table mat-table [dataSource]="categoryDataSource" class="mat-elevation-z8 table">
+
+        <!-- name Column -->
+        <ng-container matColumnDef="name">
+            <th mat-header-cell *matHeaderCellDef>分类名称</th>
+            <td mat-cell *matCellDef="let element;indes as i">
+                @if (!!element.id) {
+                    <a [routerLink]="['/categories/details',element.id]">{{ element.name }}</a>
+                } @else {
+                    <input type="text" name="{i}" [(ngModel)]="element.name" minlength="1" required/>
+                }
+            </td>
+        </ng-container>
+
+        <!-- subcategoryCount Column -->
+        <ng-container matColumnDef="subcategoryCount">
+            <th mat-header-cell *matHeaderCellDef>子分类数量</th>
+            <td mat-cell *matCellDef="let element">{{ element.subcategoryCount }}</td>
+        </ng-container>
+
+        <!-- productCount Column -->
+        <!--<ng-container matColumnDef="productCount">
+            <th mat-header-cell *matHeaderCellDef>产品数量</th>
+            <td mat-cell *matCellDef="let element">{{element.productCount}}</td>
+        </ng-container>-->
+
+        <!-- subcategoryCount Column -->
+        <ng-container matColumnDef="isVisible">
+            <th mat-header-cell *matHeaderCellDef>是否显示</th>
+            <td mat-cell *matCellDef="let element">{{ element.isVisible }}</td>
+        </ng-container>
+
+        <!-- delete operate -->
+        <ng-container matColumnDef="delete">
+            <th mat-header-cell *matHeaderCellDef></th>
+            <td mat-cell *matCellDef="let element;index as i">
+                <button mat-icon-button (click)="deleteCategory(element,i)">
+                    <mat-icon>delete</mat-icon>
+                </button>
+            </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    </table>
+
+    <page-footer>
+        <button mat-raised-button type="submit" [disabled]="!categoriesForm.valid">保存</button>
+    </page-footer>
+</form>

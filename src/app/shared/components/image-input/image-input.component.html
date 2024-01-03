@@ -1,0 +1,27 @@
+<div class="image-input-container">
+    @if (value!.length > 0) {
+        <!-- have image -->
+        @for (inputFile of value;track $index) {
+            <div class="image-content" [ngStyle]="{ 'margin-top': value ? '5px' : '20px'}">
+                <img src="http://localhost:8080/files/{{inputFile.url}}" [alt]="inputFile.name"/>
+                <button mat-icon-button type="button" class="delete-button" (click)="deleteFile($index)">
+                    <mat-icon>close</mat-icon>
+                </button>
+            </div>
+        }
+    }
+    @if (value!.length < maxFileCount) {
+        <div class="image-upload-content" [ngStyle]="{ 'margin-top': value ? '5px' : '20px'}">
+            <!-- no image or value.length< maxLength -->
+            <mat-icon style="opacity: 60%;">file_upload</mat-icon>
+            <button mat-raised-button type="button" color="primary" style="width:100%; opacity: 80%;">
+                Browser
+            </button>
+            <small style="margin: 20px">Drag and drop here</small>
+            <!-- put on top of the image-upload-content with opacity 0 -->
+            <input type="file" class="upload-button" (change)="onFileSelected($event)" [accept]="fileType"
+                   [multiple]="multiple">
+        </div>
+    }
+    <input [formControl]="filesControl" [hidden]="true"/>
+</div>

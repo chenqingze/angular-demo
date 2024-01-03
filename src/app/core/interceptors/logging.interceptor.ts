@@ -25,8 +25,7 @@ export const loggingInterceptor: HttpInterceptorFn = (req, next) => {
             // Log when response observable either completes or errors
             finalize(() => {
                 const elapsed = Date.now() - started;
-                const msg = `${req.method} "${req.urlWithParams}"
-                        ${ok} in ${elapsed} ms.`;
+                const msg = `${req.method} ${req.urlWithParams}  ${ok} in ${elapsed} ms.`;
                 messageService.add(msg);
                 // console.log("Interceptor Logging -->");
                 // messageService.messages.forEach(message => console.log)

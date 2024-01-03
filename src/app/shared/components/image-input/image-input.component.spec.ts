@@ -1,18 +1,18 @@
 import {ComponentFixture, TestBed} from '@angular/core/testing';
 
-import {PageNotFoundComponent} from './page-not-found.component';
+import {ImageInputComponent} from './image-input.component';
 
-describe('PageNotFoundComponent', () => {
-    let component: PageNotFoundComponent;
-    let fixture: ComponentFixture<PageNotFoundComponent>;
+describe('PictureInputComponent', () => {
+    let component: ImageInputComponent;
+    let fixture: ComponentFixture<ImageInputComponent>;
 
     beforeEach(async () => {
         await TestBed.configureTestingModule({
-            imports: [PageNotFoundComponent]
+            imports: [ImageInputComponent]
         })
             .compileComponents();
 
-        fixture = TestBed.createComponent(PageNotFoundComponent);
+        fixture = TestBed.createComponent(ImageInputComponent);
         component = fixture.componentInstance;
         fixture.detectChanges();
     });

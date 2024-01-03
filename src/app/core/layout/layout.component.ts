@@ -7,8 +7,8 @@ import {RouterLink, RouterOutlet} from '@angular/router';
 import {MatIconModule} from '@angular/material/icon';
 import {MatButtonModule} from '@angular/material/button';
 import {SideMenuComponent} from './side-menu/side-menu.component';
-import {BreadcrumbComponent} from '../../shared/components/breadcrumb/breadcrumb.component';
 import {SidebarComponent} from './sidebar/sidebar.component';
+import {FooterComponent} from './footer/footer.component';
 
 @Component({
     selector: 'app-layout',
@@ -22,8 +22,8 @@ import {SidebarComponent} from './sidebar/sidebar.component';
         MatButtonModule,
         SideMenuComponent,
         RouterOutlet,
-        BreadcrumbComponent,
-        SidebarComponent
+        SidebarComponent,
+        FooterComponent
     ],
     templateUrl: './layout.component.html',
     styleUrl: './layout.component.scss'
@@ -31,6 +31,7 @@ import {SidebarComponent} from './sidebar/sidebar.component';
 export class LayoutComponent implements OnDestroy {
     mobileQuery: MediaQueryList;
     private readonly _mobileQueryListener: () => void;
+    isMiniNavigation: boolean;
 
     constructor(changeDetectorRef: ChangeDetectorRef, media: MediaMatcher) {
         this.mobileQuery = media.matchMedia('(max-width: 600px)');
@@ -40,6 +41,7 @@ export class LayoutComponent implements OnDestroy {
         } else {
             this.mobileQuery.addListener(this._mobileQueryListener);
         }
+        this.isMiniNavigation = this.mobileQuery.matches;
 
     }
 
@@ -51,4 +53,5 @@ export class LayoutComponent implements OnDestroy {
         }
 
     }
+
 }

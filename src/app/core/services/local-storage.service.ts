@@ -1,12 +1,12 @@
 import {Injectable} from '@angular/core';
-import {environment} from '../../../environments/environment';
+import {GLOBAL_CONFIG} from '../global-config';
 
 
 @Injectable({
     providedIn: 'root'
 })
 export class LocalStorageService {
-    private APP_PREFIX = `${environment.appName}-`;
+    private APP_PREFIX = GLOBAL_CONFIG.appPrefix;
 
     public get(key: string): any {
         const item = localStorage.getItem(`${this.APP_PREFIX}${key}`);

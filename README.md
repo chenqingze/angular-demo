@@ -29,3 +29,12 @@ package that implements end-to-end testing capabilities.
 
 To get more help on the Angular CLI use `ng help` or go check out
 the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
+
+## Todo List
+
+- [ ] Localize
+- [ ] fix 文本框回车事件自动提交
+- [ ] rich-editor
+- [ ] 上传多张图片时顺序调整功能
+- [ ] angular material custom component style
+    - [ ] hidden radio but keep accessible

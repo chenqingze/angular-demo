@@ -2,10 +2,10 @@ import {Inject, Injectable} from '@angular/core';
 import {Router} from '@angular/router';
 import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {LocalStorageService} from './local-storage.service';
-import {SessionStorageService} from './session-storage.service';
 import {catchError, finalize, map, Observable, of, tap} from 'rxjs';
 import {AUTH_STRATEGY, AuthStrategy} from './auth.strategy';
 import {User} from '../../shared/models/user';
+import {GLOBAL_CONFIG} from '../global-config';
 
 export interface SMSVerificationRequest {
     phoneNumber: string;
@@ -23,22 +23,22 @@ export interface LoginRequest {
 })
 export class AuthService {
 
-    // private readonly LOCAL_STORAGE_KEY_AUTHENTICATED = 'AUTHENTICATED';
+
     private readonly LOCAL_STORAGE_KEY_X_AUTH_TOKEN = 'X-AUTH-TOKEN';
-    private readonly LOCAL_STORAGE_KEY_SESSION_USER = 'SESSION-USER';
-    private readonly SESSION_STORAGE_KEY_REDIRECT_URL = 'REDIRECT_URL';
 
     public readonly DEFAULT_PATH = "/";
     public readonly LOGIN_PATH = "/login";
-    public readonly LOGOUT_PATH = "/logout";
 
     private _redirectUrl: string = this.DEFAULT_PATH;
 
     constructor(private router: Router,
                 private http: HttpClient,
                 @Inject(AUTH_STRATEGY) private auth: AuthStrategy<any>,
-                private localStorageService: LocalStorageService,
-                private sessionStorageService: SessionStorageService) {
+                private localStorageService: LocalStorageService) {
+    }
+
+    get xAuthToken() {
+        return this.localStorageService.get(this.LOCAL_STORAGE_KEY_X_AUTH_TOKEN);
     }
 
     get redirectUrl(): string {
@@ -49,6 +49,14 @@ export class AuthService {
         this._redirectUrl = url;
     }
 
+    refreshCsrf() {
+        this.http.get(GLOBAL_CONFIG.csrfUrl).subscribe();
+    }
+
+    clearLoginUser() {
+        this.auth.doLogoutUser();
+    }
+
     /**
      * 用户名和密码登录
      * @param credentials
@@ -57,7 +65,17 @@ export class AuthService {
         const headers = new HttpHeaders(
             credentials ? {authorization: 'Basic ' + btoa(unescape(encodeURIComponent(credentials.username + ':' + credentials.password)))} : {}
         );
-        return this.http.get('/me', {headers: headers}).pipe(tap((user) => this.doAfterLogin(user as User)));
+        return this.http.get(GLOBAL_CONFIG.userProfileUrl, {headers: headers, observe: 'response'})
+            .pipe(
+                tap((response: any) => {
+                    // 如果使用token的方式，保存x-auth-token
+                    const xAuthToken = response.headers.get('X-Auth-Token');
+                    this.localStorageService.set(this.LOCAL_STORAGE_KEY_X_AUTH_TOKEN, xAuthToken);
+                    // this.refreshCsrf();
+                    this.auth.doLoginUser(response.body.principal as User)
+                    this.doRedirect();
+                })
+            );
     }
 
     /**
@@ -76,14 +94,8 @@ export class AuthService {
         return this.http.post('/verify-sms-verification-code', logRequest);
     }
 
-    doAfterLogin(user: User) {
-        console.log(user);
-        this.auth.doLoginUser(user)
-        this.doRedirect();
-    }
-
     doRedirect() {
-        if (this.redirectUrl) {
+        if (this.redirectUrl && this.redirectUrl !== this.LOGIN_PATH) {
             this.router.navigateByUrl(this.redirectUrl).then(() => this.redirectUrl = this.DEFAULT_PATH);
         } else {
             this.router.navigateByUrl(this.DEFAULT_PATH).then();
@@ -92,19 +104,17 @@ export class AuthService {
 
     logout(callback?: Function) {
         this.http
-            .post(this.LOGOUT_PATH, {})
+            .post(GLOBAL_CONFIG.logoutUrl, {})
             .pipe(
-                tap(() => this.auth.doLogoutUser()),
+                tap(() => {
+                    this.refreshCsrf();
+                    this.auth.doLogoutUser();
+                }),
                 finalize(() => {
-                    this.doAfterLogout();
+                    this.router.navigateByUrl(this.LOGIN_PATH);
                 })
             )
             .subscribe(callback && callback());
-    }
-
-    doAfterLogout() {
-        this.auth.doLogoutUser();
-        this.router.navigateByUrl(this.LOGIN_PATH);
     }
 
 
@@ -119,8 +129,8 @@ export class AuthService {
         return this.auth.getCurrentUser();
     }
 
-
     /* getUserRole$(): Observable<string> {
          return this.auth.getCurrentUser().pipe(map((user) => user.role));
      }*/
+
 }

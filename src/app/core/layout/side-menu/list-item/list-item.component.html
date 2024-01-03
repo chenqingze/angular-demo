@@ -1,8 +1,8 @@
 @if (menuItem.isShownInMenu) {
-    <section [ngStyle]="{'padding-left': (depth * 24) + 'px'}">
+    <section [ngStyle]="{'padding-left': depth*2 + 'rem'}">
         @if (hasChildren) {
             <a mat-list-item (click)="isExpanded=!isExpanded" [attr.aria-label]="'Toggle ' + menuItem.name">
-                <mat-icon>{{ menuItem.icon }}</mat-icon>
+                <mat-icon class="item-list-icon">{{ menuItem.icon }}</mat-icon>
                 <span>{{ menuItem.name }}</span>
             </a>
             @if (isExpanded) {
