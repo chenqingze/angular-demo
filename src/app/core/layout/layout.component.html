@@ -7,13 +7,12 @@
         </mat-sidenav>
         <!-- app header -->
         <mat-sidenav-content class="admin-content">
-            <mat-toolbar color="primary">
+            <app-header [ngClass]="{ 'hidden': isAppHeaderHidden }">
                 <button mat-icon-button
                         (click)="mobileQuery.matches?sidenav.toggle():isMiniNavigation=!isMiniNavigation">
                     <mat-icon>menu</mat-icon>
                 </button>
-                <h1 class="app-name">Happiness App</h1>
-            </mat-toolbar>
+            </app-header>
             <!--  content  -->
             <div class="content">
                 <router-outlet></router-outlet>

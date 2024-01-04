@@ -34,8 +34,9 @@ export class CategoryService {
         return this.httpClient.get<Category []>(this.PATH);
     }
 
-    getAllSubcategories(parentCategoryId: string): Observable<Category []> {
-        return this.httpClient.get<Category []>(`${this.PATH}/${parentCategoryId}/subcategories`);
+    getAllSubcategories(parentCategoryId?: string): Observable<Category []> {
+        const path = parentCategoryId ? `${this.PATH}/${parentCategoryId}/subcategories` : `${this.PATH}/root/subcategories`
+        return this.httpClient.get<Category []>(path);
     }
 
     buildCategoryForm = (isNew = true): FormGroup<CategoryForm> => {

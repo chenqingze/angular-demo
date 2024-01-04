@@ -1,5 +1,5 @@
-import {ChangeDetectorRef, Component, OnDestroy} from '@angular/core';
-import {MatSidenavModule} from '@angular/material/sidenav';
+import {AfterViewInit, ChangeDetectorRef, Component, OnDestroy, ViewChild} from '@angular/core';
+import {MatSidenavContainer, MatSidenavModule} from '@angular/material/sidenav';
 import {MediaMatcher} from '@angular/cdk/layout';
 import {MatListModule} from '@angular/material/list';
 import {MatToolbarModule} from '@angular/material/toolbar';
@@ -9,6 +9,8 @@ import {MatButtonModule} from '@angular/material/button';
 import {SideMenuComponent} from './side-menu/side-menu.component';
 import {SidebarComponent} from './sidebar/sidebar.component';
 import {FooterComponent} from './footer/footer.component';
+import {HeaderComponent} from './header/header.component';
+import {NgClass} from '@angular/common';
 
 @Component({
     selector: 'app-layout',
@@ -23,15 +25,19 @@ import {FooterComponent} from './footer/footer.component';
         SideMenuComponent,
         RouterOutlet,
         SidebarComponent,
-        FooterComponent
+        FooterComponent,
+        HeaderComponent,
+        NgClass
     ],
     templateUrl: './layout.component.html',
     styleUrl: './layout.component.scss'
 })
-export class LayoutComponent implements OnDestroy {
+export class LayoutComponent implements OnDestroy, AfterViewInit {
+    @ViewChild(MatSidenavContainer) sidenavContainer!: MatSidenavContainer;
     mobileQuery: MediaQueryList;
     private readonly _mobileQueryListener: () => void;
     isMiniNavigation: boolean;
+    isAppHeaderHidden: boolean = false;
 
     constructor(changeDetectorRef: ChangeDetectorRef, media: MediaMatcher) {
         this.mobileQuery = media.matchMedia('(max-width: 600px)');
@@ -54,4 +60,14 @@ export class LayoutComponent implements OnDestroy {
 
     }
 
+    ngAfterViewInit() {
+        this.sidenavContainer.scrollable.elementScrolled().subscribe(() => {
+            const scrollPosition = this.sidenavContainer.scrollable.measureScrollOffset('top');
+            if (scrollPosition > 60 && !this.isAppHeaderHidden) {
+                this.isAppHeaderHidden = true;
+            } else if (scrollPosition <= 60 && this.isAppHeaderHidden) {
+                this.isAppHeaderHidden = false;
+            }
+        })
+    }
 }

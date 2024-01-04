@@ -50,7 +50,6 @@ export const errorInterceptor: HttpInterceptorFn = (req, next) => {
                     }
                     isHandlingUnauthorized = true;
                     // 判断路由不适登录页面，则保存路由地址，等待登录后重定向到之前的页面
-                    console.log('======401=======', router.url)
                     const routerUrl = router.url;
                     if (routerUrl !== authService.LOGIN_PATH) {
                         authService.redirectUrl = routerUrl;

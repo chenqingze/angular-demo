@@ -49,8 +49,7 @@ export class CategoryListComponent implements OnInit {
     }
 
     ngOnInit(): void {
-        const initRequest$ = !!this.parentCategoryId ? this.categoryService.getAllSubcategories(this.parentCategoryId) : this.categoryService.getAllCategories();
-        initRequest$.subscribe((result) => {
+        this.categoryService.getAllSubcategories(this.parentCategoryId).subscribe((result) => {
             this.allCategories = result;
             this.categoryDataSource = new MatTableDataSource<Category>(result);
             this.newCategories = [];

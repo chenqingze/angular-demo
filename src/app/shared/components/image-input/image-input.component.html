@@ -3,14 +3,14 @@
         <!-- have image -->
         @for (inputFile of value;track $index) {
             <div class="image-content" [ngStyle]="{ 'margin-top': value ? '5px' : '20px'}">
-                <img src="http://localhost:8080/files/{{inputFile.url}}" [alt]="inputFile.name"/>
+                <img [ngSrc]="inputFile.url" [alt]="inputFile.name" width="150" height="150"/>
                 <button mat-icon-button type="button" class="delete-button" (click)="deleteFile($index)">
                     <mat-icon>close</mat-icon>
                 </button>
             </div>
         }
     }
-    @if (value!.length < maxFileCount) {
+    @if (value!.length < maxCount) {
         <div class="image-upload-content" [ngStyle]="{ 'margin-top': value ? '5px' : '20px'}">
             <!-- no image or value.length< maxLength -->
             <mat-icon style="opacity: 60%;">file_upload</mat-icon>
@@ -19,7 +19,7 @@
             </button>
             <small style="margin: 20px">Drag and drop here</small>
             <!-- put on top of the image-upload-content with opacity 0 -->
-            <input type="file" class="upload-button" (change)="onFileSelected($event)" [accept]="fileType"
+            <input type="file" class="upload-button" (change)="onFileSelected($event)" [accept]="imageType"
                    [multiple]="multiple">
         </div>
     }

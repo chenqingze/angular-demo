@@ -10,20 +10,36 @@
                         </mat-form-field>
                         <mat-form-field>
                             <mat-label>父分类</mat-label>
+                            <!-- todo: select -->
                             <input matInput type="text" formControlName="parentId">
                         </mat-form-field>
                         <mat-form-field>
-                            <mat-label>是否可见</mat-label>
-                            <input matInput type="text" formControlName="isVisible">
+                            <mat-label>是否启用</mat-label>
+                            <mat-select formControlName="enabled">
+                                <mat-option [value]="true">是</mat-option>
+                                <mat-option [value]="false">否</mat-option>
+                            </mat-select>
                         </mat-form-field>
                         <mat-form-field>
                             <mat-label>分类图片</mat-label>
-                            <image-input [multiple]="true" [maxFileCount]="1" [fileType]="'image/*'"></image-input>
+                            <image-input [multiple]="true"
+                                         [maxCount]="1"
+                                         [imageType]="'image/*'"
+                                         formControlName="icon">
+                            </image-input>
                         </mat-form-field>
+                        <label for="description">描述</label>
+                        <ngx-wig id="description" formControlName="description"></ngx-wig>
+
                     </mat-card-content>
-                    <button mat-button type="button">Cancel</button>
-                    <button mat-button type="submit" [disabled]="!categoryDetailsFrom.valid">Submit</button>
                 </mat-card>
+                <page-footer>
+                    <ng-container buttons>
+                        <!--<button mat-raised-button type="button">取消</button>-->
+                        <button mat-raised-button type="submit" [disabled]="categoryDetailsFrom.invalid">保存</button>
+                    </ng-container>
+
+                </page-footer>
             </form>
         </ng-template>
     </mat-tab>

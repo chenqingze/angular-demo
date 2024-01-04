@@ -1,4 +1,4 @@
-import {Component, Input, OnDestroy, Optional, Self} from '@angular/core';
+import {Component, ElementRef, Input, OnDestroy, Optional, Self} from '@angular/core';
 import {FileUploadResult, Image, UploadFile} from '../../models/file';
 import {MatFormFieldControl} from '@angular/material/form-field';
 import {NgOptimizedImage, NgStyle} from '@angular/common';
@@ -8,6 +8,7 @@ import {ControlValueAccessor, FormControl, NgControl, ReactiveFormsModule} from 
 import {catchError, forkJoin, of, Subject, tap} from 'rxjs';
 import {HttpEvent, HttpEventType} from '@angular/common/http';
 import {FileUploadService} from '../../../core/services/file-upload.service';
+import {BooleanInput, coerceBooleanProperty} from '@angular/cdk/coercion';
 
 @Component({
     selector: 'image-input',
@@ -25,46 +26,96 @@ import {FileUploadService} from '../../../core/services/file-upload.service';
         {provide: MatFormFieldControl, useExisting: ImageInputComponent},
     ],
 })
-export class ImageInputComponent implements ControlValueAccessor, MatFormFieldControl<Image []>, OnDestroy {
+export class ImageInputComponent implements ControlValueAccessor, MatFormFieldControl<Image [] | Image>, OnDestroy {
     static nextId = 0;
-    @Input() fileType!: string;
+    // 图片类型
+    @Input() imageType!: string;
+    // 是否允许多选
     @Input() multiple: boolean = false;
     // 可上传最大文件数量
-    @Input() maxFileCount: number = 1;
+    @Input() maxCount: number = 1;
     uploadFileList: UploadFile[] = [];
-
-    @Input()
-    set value(images: Image [] | null) {
-        this.filesControl.setValue(images || []);
-        this.stateChanges.next();
-    }
-
-    get value(): Image [] {
-        if (this.filesControl.valid) {
-            return this.filesControl.getRawValue() || [];
-        }
-        return [];
-    }
 
     filesControl: FormControl = new FormControl<Image []>([]);
 
-    id: string = `image-input-${ImageInputComponent.nextId++}`;
-    @Input() placeholder: string = '';
-    @Input() required: boolean = false;
-    @Input('aria-describedby') userAriaDescribedBy: string = '';
-    @Input() shouldLabelFloat: boolean = true;
-
     stateChanges = new Subject<void>();
-    disabled: boolean = false;
-    focused: boolean = false;
-    controlType = 'file-input';
+    focused = false;
+    touched = false;
+    controlType = 'image-input';
+    id: string = `image-input-${ImageInputComponent.nextId++}`;
+    onChange = (_: any) => {
+    };
+    onTouched = () => {
+    };
 
     get empty() {
-        return this.value.length === 0;
+        return this.value!.length === 0;
+    }
+
+    get shouldLabelFloat() {
+        return true;
+    }
+
+    @Input('aria-describedby') userAriaDescribedBy: string = '';
+
+    @Input()
+    get placeholder(): string {
+        return this._placeholder;
+    }
+
+    set placeholder(value: string) {
+        this._placeholder = value;
+        this.stateChanges.next();
+    }
+
+    private _placeholder: string = '';
+
+    @Input()
+    get required(): boolean {
+        return this._required;
+    }
+
+    set required(value: BooleanInput) {
+        this._required = coerceBooleanProperty(value);
+        this.stateChanges.next();
+    }
+
+    private _required = false;
+
+    @Input()
+    get disabled(): boolean {
+        return this._disabled;
+    }
+
+    set disabled(value: BooleanInput) {
+        this._disabled = coerceBooleanProperty(value);
+        this._disabled ? this.filesControl.disable() : this.filesControl.enable();
+        this.stateChanges.next();
+    }
+
+    private _disabled = false;
+
+    @Input()
+    get value(): Image [] | [] {
+        const {value} = this.filesControl;
+        return value;
+    }
+
+    set value(images: Image [] | Image | null) {
+        let imageArray: Image[] = [];
+        if (images) {
+            if (images instanceof Array) {
+                imageArray = images;
+            } else {
+                imageArray = [images];
+            }
+        }
+        this.filesControl.setValue(imageArray);
+        this.stateChanges.next();
     }
 
     get errorState(): boolean {
-        return this.filesControl.invalid;
+        return this.filesControl.invalid && this.touched;
     }
 
     onFileSelected(event: Event) {
@@ -81,6 +132,7 @@ export class ImageInputComponent implements ControlValueAccessor, MatFormFieldCo
                 }
             });
         })
+
     }
 
     private buildUploadFileListAndRequestsChain(fileList: FileList) {
@@ -136,23 +188,23 @@ export class ImageInputComponent implements ControlValueAccessor, MatFormFieldCo
                         url: result.path,
                         displayOrder: uploadFileListIndex,
                     };
-                    this.filesControl.value.push(file)
+                    this.value = [...this.value, file];
+
+                    this.onChange(this.value);
+
                 }
                 break;
             default:
-                // console.log(`File "${file.name}" surprising upload event: ${event.type}.`);
-                console.log(`File surprising upload event: ${event.type}.`);
+                console.log(`File "${file.name}" surprising upload event: ${event.type}.`);
         }
     }
 
     deleteFile(index: number) {
-        console.log('======index=====', index)
-        this.filesControl.getRawValue().splice(index, 1);
-        console.log('=======getRawValue======', [...this.filesControl.getRawValue()]);
-        console.log('=====value=======', [...this.value]);
+        this.value.splice(index, 1);
     }
 
-    constructor(private fileUploadService: FileUploadService, @Optional() @Self() public ngControl: NgControl) {
+    constructor(private fileUploadService: FileUploadService, private _elementRef: ElementRef<HTMLElement>, @Optional() @Self() public ngControl: NgControl) {
+
         if (this.ngControl != null) {
             // Setting the value accessor directly (instead of using
             // the providers) to avoid running into a circular import.
@@ -161,27 +213,29 @@ export class ImageInputComponent implements ControlValueAccessor, MatFormFieldCo
     }
 
     setDescribedByIds(ids: string[]): void {
-        // throw new Error('Method not implemented.');
+        const controlElement = this._elementRef.nativeElement
+            .querySelector('.image-input-container')!;
+        controlElement.setAttribute('aria-describedby', ids.join(' '));
     }
 
     onContainerClick(event: MouseEvent): void {
         // throw new Error('Method not implemented.');
     }
 
-    writeValue(obj: any): void {
-        // throw new Error('Method not implemented.');
+    writeValue(images: Image []): void {
+        this.value = images;
     }
 
     registerOnChange(fn: any): void {
-        // throw new Error('Method not implemented.');
+        this.onChange = fn;
     }
 
     registerOnTouched(fn: any): void {
-        // throw new Error('Method not implemented.');
+        this.onTouched = fn;
     }
 
     setDisabledState?(isDisabled: boolean): void {
-        // throw new Error('Method not implemented.');
+        this.disabled = isDisabled;
     }
 
     ngOnDestroy(): void {
