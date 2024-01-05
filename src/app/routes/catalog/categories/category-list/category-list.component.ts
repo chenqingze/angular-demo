@@ -30,7 +30,7 @@ import {PageFooterComponent} from '../../../../shared/components/page-footer/pag
 })
 export class CategoryListComponent implements OnInit {
     @Input() parentCategoryId: string | undefined;
-    displayedColumns: string[] = ['name', 'subcategoryCount', 'isVisible', 'delete'];
+    displayedColumns: string[] = ['name', 'subcategoryCount', 'enabled', 'delete'];
     categoryDataSource: MatTableDataSource<Category> = new MatTableDataSource<Category>([]);
     allCategories: Category[] = [];
     newCategories: Category[] = [];

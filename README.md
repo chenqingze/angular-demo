@@ -32,6 +32,8 @@ the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
 
 ## Todo List
 
+- [ ] category
+  - [ ] product-list
 - [ ] Localize
 - [ ] fix 文本框回车事件自动提交
 - [ ] ngx-wig 自定义功能
@@ -39,5 +41,9 @@ the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
     - [ ] 段落位置：剧中，左对齐，有对齐等
     - [ ] 文字颜色
 - [ ] 上传多张图片时顺序调整功能
+- [ ] reporting progress on uploaded files.
 - [ ] angular material custom component style
     - [ ] hidden radio but keep accessible
+- [ ] elegant way to refresh component after submit
+- [ ] Service Worker apply
+  - [ ] use app-shell pattern
