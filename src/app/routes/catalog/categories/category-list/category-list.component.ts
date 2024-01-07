@@ -11,6 +11,7 @@ import {forkJoin} from 'rxjs';
 import {NotificationService} from '../../../../core/services/notification.service';
 import {FormsModule} from '@angular/forms';
 import {PageFooterComponent} from '../../../../shared/components/page-footer/page-footer.component';
+import {DialogService} from '../../../../core/services/dialog.service';
 
 @Component({
     selector: 'app-category-list',
@@ -35,7 +36,7 @@ export class CategoryListComponent implements OnInit {
     allCategories: Category[] = [];
     newCategories: Category[] = [];
 
-    constructor(private router: Router, private route: ActivatedRoute, private notificationService: NotificationService, private categoryService: CategoryService) {
+    constructor(private router: Router, private route: ActivatedRoute, private notificationService: NotificationService, private dialogService: DialogService, private categoryService: CategoryService) {
     }
 
     addCategory() {
@@ -67,10 +68,19 @@ export class CategoryListComponent implements OnInit {
 
     deleteCategory(category: Category, index: number) {
         if (!!category.id) {
-            this.categoryService.deleteCategory(category.id).subscribe(() => this.ngOnInit());
+            this.dialogService.confirmDialog({
+                message: `确定删除分类\"${category.name}\"吗?`,
+                confirmCaption: '是',
+                cancelCaption: '否',
+            }).subscribe((choice) => {
+                choice && this.categoryService.deleteCategory(category.id!).subscribe(() => this.ngOnInit());
+            });
+
         } else {
             this.categoryDataSource.data.splice(index, 1)
             this.categoryDataSource.data = [...this.categoryDataSource.data];
         }
+
+
     }
 }

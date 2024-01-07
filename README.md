@@ -31,9 +31,7 @@ To get more help on the Angular CLI use `ng help` or go check out
 the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
 
 ## Todo List
-
-- [ ] category
-  - [ ] product-list
+### no business list
 - [ ] Localize
 - [ ] fix 文本框回车事件自动提交
 - [ ] ngx-wig 自定义功能
@@ -47,3 +45,52 @@ the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
 - [ ] elegant way to refresh component after submit
 - [ ] Service Worker apply
   - [ ] use app-shell pattern
+  
+
+### business list
+- [ ] 分类管理模块
+  - [x] 分类列表
+  - [x] 添加分类 
+  - [x] 删除分类
+  - [ ] 分类排序
+  - [ ] 启用和禁用分类
+  - [x] 编辑分类详情
+  - [x] 子分类列表
+  - [x] 添加子分类
+  - [x] 删除子分类
+  - [ ] 子分类排序
+  - [ ] 启用和禁用子分类
+  - [ ] 属于分类的产品列表
+  - [ ] 添加产品到分类
+  - [ ] 对分类内的产品进行排序
+  - [ ] 属于分类的推荐产品列表
+  - [ ] 添加推荐产品到分类
+  - [ ] 对分类内的推荐产品进行排序
+  - [ ] 导入/导出分类  
+      
+-[ ] 产品管理模块
+  - [ ] 产品列表
+  - [ ] 添加产品
+  - [ ] 删除产品
+  - [ ] 编辑产品详情
+  - [ ] 启用和禁用产品
+  - [ ] 启用和禁用促销
+  - [ ] 推荐产品列表
+
+- [ ] 产品类别与属性模块
+  - [ ] 产品属性列表（包含所有全局属性和产品类别属性）
+  - [ ] 产品属性排序
+  - [ ] 产品类别列表
+  - [ ] 添加产品类别
+  - [ ] 删除产品类别
+  - [ ] 编辑产品类别名称
+  - [ ] 产品类别排序
+  - [ ] 添加属性（包含全局属性和类别属性）
+  - [ ] 添加多值属性（产品选项）
+  - [ ] 编辑属性
+  - [ ] 删除属性
+  - [ ] 添加属性分组
+  - [ ] 编辑属性分组
+  - [ ] 删除属性分组
+  - [ ] 分配属性到分组
+  - [ ] 是否显示属性到价格选项
