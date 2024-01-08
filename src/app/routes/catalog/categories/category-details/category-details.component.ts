@@ -47,7 +47,7 @@ interface CategoryDetailForm {
     styleUrl: './category-details.component.scss'
 })
 export class CategoryDetailsComponent implements OnInit {
-    @ViewChild(MatTabGroup) tabGroup!: MatTabGroup;
+    @ViewChild('tabGroup') tabGroup!: MatTabGroup;
     categoryId!: string;
     categoryDetailsFrom = new FormGroup<CategoryDetailForm>({
         id: new FormControl(),

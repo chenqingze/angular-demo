@@ -1,4 +1,4 @@
-import {MenuItem, MenuType} from "../../../shared/models/menu-item";
+import {MenuItem, MenuType} from "../shared/models/menu-item";
 
 export const menuList: MenuItem[] = [
     {
@@ -133,7 +133,7 @@ export const menuList: MenuItem[] = [
         ]
     },
     {
-        'name': '商品管理',
+        'name': '产品管理',
         'permit': 'product_module',
         'cached': false,
         'icon': 'sell',
@@ -158,7 +158,7 @@ export const menuList: MenuItem[] = [
                 'children': []
             },
             {
-                'name': '商品分类',
+                'name': '产品分类',
                 'permit': 'category:read',
                 'cached': false,
                 'icon': '',
@@ -176,6 +176,18 @@ export const menuList: MenuItem[] = [
                 'cached': false,
                 'icon': '', 'enabled': true,
                 'url': '/brands',
+                'target': '_self',
+                'type': MenuType.PAGE,
+                'displayOrder': 100,
+                'isShownInMenu': true,
+                'children': []
+            },
+            {
+                'name': '属性管理',
+                'permit': 'attributes:read',
+                'cached': false,
+                'icon': '', 'enabled': true,
+                'url': '/attributes',
                 'target': '_self',
                 'type': MenuType.PAGE,
                 'displayOrder': 100,

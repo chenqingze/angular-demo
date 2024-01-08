@@ -1,0 +1,52 @@
+<div class="button-container">
+    <button mat-raised-button type="button" (click)="addAttribute()" class="button">
+        添加分类
+    </button>
+</div>
+
+<!--
+<table mat-table [dataSource]="" class="mat-elevation-z8 table">
+
+    &lt;!&ndash; name Column &ndash;&gt;
+    <ng-container matColumnDef="name">
+        <th mat-header-cell *matHeaderCellDef>分类名称</th>
+        <td mat-cell *matCellDef="let element;indes as i">
+            @if (!!element.id) {
+                <a [routerLink]="['/categories/details/',element.id]">{{ element.name }}</a>
+            } @else {
+                <input type="text" name="{i}" [(ngModel)]="element.name" minlength="1" required/>
+            }
+        </td>
+    </ng-container>
+
+    &lt;!&ndash; subcategoryCount Column &ndash;&gt;
+    <ng-container matColumnDef="subcategoryCount">
+        <th mat-header-cell *matHeaderCellDef>子分类数量</th>
+        <td mat-cell *matCellDef="let element">{{ element.subcategoryCount }}</td>
+    </ng-container>
+
+    &lt;!&ndash; productCount Column &ndash;&gt;
+    &lt;!&ndash;<ng-container matColumnDef="productCount">
+        <th mat-header-cell *matHeaderCellDef>产品数量</th>
+        <td mat-cell *matCellDef="let element">{{element.productCount}}</td>
+    </ng-container>&ndash;&gt;
+
+    &lt;!&ndash; enabled Column &ndash;&gt;
+    <ng-container matColumnDef="enabled">
+        <th mat-header-cell *matHeaderCellDef>是否启用</th>
+        <td mat-cell *matCellDef="let element">{{ element.enabled }}</td>
+    </ng-container>
+
+    &lt;!&ndash; delete operate &ndash;&gt;
+    <ng-container matColumnDef="delete">
+        <th mat-header-cell *matHeaderCellDef></th>
+        <td mat-cell *matCellDef="let element;index as i">
+            <button mat-icon-button (click)="deleteCategory(element,i)">
+                <mat-icon>delete</mat-icon>
+            </button>
+        </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+</table>-->

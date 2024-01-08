@@ -19,6 +19,7 @@ export const routes: Routes = [
             {path: 'dashboard', component: DashboardComponent},
             {path: 'products', loadChildren: () => import('./routes/catalog/products/products.routes')},
             {path: 'categories', loadChildren: () => import('./routes/catalog/categories/categories.routes')},
+            {path: 'attributes', loadChildren: () => import('./routes/catalog/attributes/attributes.routes')},
 
         ]
     },

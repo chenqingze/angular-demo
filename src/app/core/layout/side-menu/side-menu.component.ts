@@ -4,7 +4,7 @@ import {MatListModule} from '@angular/material/list';
 import {RouterLink} from '@angular/router';
 import {MatMenuModule} from '@angular/material/menu';
 import {MatButtonModule} from '@angular/material/button';
-import {menuList} from './menu';
+import {menuList} from '../../../data/menu';
 import {MenuItemComponent} from './menu-item/menu-item.component';
 import {ListItemComponent} from './list-item/list-item.component';
 import {MenuItem} from '../../../shared/models/menu-item';

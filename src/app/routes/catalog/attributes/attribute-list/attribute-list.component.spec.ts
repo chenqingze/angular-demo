@@ -1,18 +1,18 @@
 import {ComponentFixture, TestBed} from '@angular/core/testing';
 
-import {ConfirmComponent} from './confirm.component';
+import {AttributeListComponent} from './attribute-list.component';
 
-describe('ConfirmComponent', () => {
-    let component: ConfirmComponent;
-    let fixture: ComponentFixture<ConfirmComponent>;
+describe('AttributeListComponent', () => {
+    let component: AttributeListComponent;
+    let fixture: ComponentFixture<AttributeListComponent>;
 
     beforeEach(async () => {
         await TestBed.configureTestingModule({
-            imports: [ConfirmComponent]
+            imports: [AttributeListComponent]
         })
             .compileComponents();
 
-        fixture = TestBed.createComponent(ConfirmComponent);
+        fixture = TestBed.createComponent(AttributeListComponent);
         component = fixture.componentInstance;
         fixture.detectChanges();
     });
