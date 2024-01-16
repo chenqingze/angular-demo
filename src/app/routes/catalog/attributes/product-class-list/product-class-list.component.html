@@ -1,1 +1,51 @@
-<p>product-class-list works!</p>
+<form #productClassesForm="ngForm" (ngSubmit)="onSubmit()">
+    <div class="button-container">
+        <button mat-raised-button type="button" (click)="addProductClass()" class="button">
+            添加类别
+        </button>
+        <button mat-raised-button type="button" class="button">
+            管理分组
+        </button>
+    </div>
+
+    <table mat-table cdkDropList (cdkDropListDropped)="onDropped($event)"
+           [cdkDropListData]="productClassDataSource.data"
+           [dataSource]="productClassDataSource" class="mat-elevation-z8 table">
+        <!-- dragBox Column -->
+        <ng-container matColumnDef="dragBox">
+            <td mat-cell *matCellDef="let element">
+                <mat-icon class="drag-box" fontIcon="drag_indicator"></mat-icon>
+            </td>
+        </ng-container>
+
+        <!-- name Column -->
+        <ng-container matColumnDef="name">
+            <td mat-cell *matCellDef="let element;index as i">
+                @if (!!element.id) {
+                    {{ element.name }}
+                } @else {
+                    <input type="text" name="new{{i}}" [(ngModel)]="element.name" minlength="1" required/>
+                }
+            </td>
+        </ng-container>
+
+        <!--  operate -->
+        <ng-container matColumnDef="operate">
+            <td mat-cell *matCellDef="let element;index as i">
+                <button mat-icon-button type="button">
+                    <mat-icon fontSet="material-icons-outlined">edit</mat-icon>
+                </button>
+                <button mat-icon-button type="button" (click)="edit(element)">
+                    <mat-icon fontSet="material-icons-outlined">delete</mat-icon>
+                </button>
+            </td>
+        </ng-container>
+
+        <tr mat-row cdkDrag *matRowDef="let row; columns: displayedColumns;"></tr>
+    </table>
+    <page-footer>
+        <ng-container buttons>
+            <button mat-raised-button type="submit" [disabled]="!productClassesForm.valid">保存</button>
+        </ng-container>
+    </page-footer>
+</form>

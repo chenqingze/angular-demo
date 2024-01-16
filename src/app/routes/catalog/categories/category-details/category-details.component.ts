@@ -59,6 +59,10 @@ export class CategoryDetailsComponent implements OnInit {
     });
 
     constructor(private router: Router, private route: ActivatedRoute, private categoryService: CategoryService) {
+        this.categoryId = this.route.snapshot.paramMap.get('id')!;
+    }
+
+    ngOnInit(): void {
         this.router.events.pipe(
             filter((event): event is NavigationEnd => event instanceof NavigationEnd),
             takeUntilDestroyed(),
@@ -70,10 +74,6 @@ export class CategoryDetailsComponent implements OnInit {
                 this.tabGroup.selectedIndex = 0;
             });
         });
-
-    }
-
-    ngOnInit(): void {
     }
 
     onSubmit() {

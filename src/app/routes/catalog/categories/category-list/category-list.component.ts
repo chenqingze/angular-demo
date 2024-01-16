@@ -1,6 +1,6 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, Input, OnInit, ViewChild} from '@angular/core';
 import {Category} from '../shared/category';
-import {MatTableDataSource, MatTableModule} from '@angular/material/table';
+import {MatTable, MatTableDataSource, MatTableModule} from '@angular/material/table';
 import {MatIconModule} from '@angular/material/icon';
 import {MatButtonModule} from '@angular/material/button';
 import {ActivatedRoute, Router, RouterLink} from '@angular/router';
@@ -12,6 +12,7 @@ import {NotificationService} from '../../../../core/services/notification.servic
 import {FormsModule} from '@angular/forms';
 import {PageFooterComponent} from '../../../../shared/components/page-footer/page-footer.component';
 import {DialogService} from '../../../../core/services/dialog.service';
+import {CdkDrag, CdkDragDrop, CdkDropList, moveItemInArray} from '@angular/cdk/drag-drop';
 
 @Component({
     selector: 'app-category-list',
@@ -24,19 +25,38 @@ import {DialogService} from '../../../../core/services/dialog.service';
         MatInputModule,
         MatToolbarModule,
         FormsModule,
-        PageFooterComponent
+        PageFooterComponent,
+        CdkDropList,
+        CdkDrag
     ],
     templateUrl: './category-list.component.html',
     styleUrl: './category-list.component.scss'
 })
 export class CategoryListComponent implements OnInit {
     @Input() parentCategoryId: string | undefined;
-    displayedColumns: string[] = ['name', 'subcategoryCount', 'enabled', 'delete'];
-    categoryDataSource: MatTableDataSource<Category> = new MatTableDataSource<Category>([]);
+    @ViewChild(MatTable) table!: MatTable<Category>;
     allCategories: Category[] = [];
     newCategories: Category[] = [];
+    displayedColumns: string[] = ['dragBox', 'name', 'subcategoryCount', 'enabled', 'delete'];
+    categoryDataSource: MatTableDataSource<Category> = new MatTableDataSource<Category>(this.allCategories);
+
 
     constructor(private router: Router, private route: ActivatedRoute, private notificationService: NotificationService, private dialogService: DialogService, private categoryService: CategoryService) {
+    }
+
+    ngOnInit(): void {
+        this.categoryService.getAllSubcategories(this.parentCategoryId).subscribe((result) => {
+            this.allCategories = result;
+            this.categoryDataSource.data = this.allCategories;
+            this.newCategories = [];
+        });
+
+    }
+
+    onDropped(event: CdkDragDrop<any, any>) {
+        const {previousIndex, currentIndex} = event;
+        moveItemInArray(event.container.data, previousIndex, currentIndex);
+        this.table.renderRows();
     }
 
     addCategory() {
@@ -49,14 +69,6 @@ export class CategoryListComponent implements OnInit {
         this.categoryDataSource.data = this.newCategories.concat(this.allCategories);
     }
 
-    ngOnInit(): void {
-        this.categoryService.getAllSubcategories(this.parentCategoryId).subscribe((result) => {
-            this.allCategories = result;
-            this.categoryDataSource = new MatTableDataSource<Category>(result);
-            this.newCategories = [];
-        });
-
-    }
 
     // todo: 排序
     onSubmit() {

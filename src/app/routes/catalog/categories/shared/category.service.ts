@@ -2,7 +2,6 @@ import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {Observable} from 'rxjs';
 import {Category} from './category';
-import {FormBuilder} from '@angular/forms';
 
 @Injectable({
     providedIn: 'root'
@@ -11,7 +10,7 @@ export class CategoryService {
 
     readonly PATH = '/catalog/categories';
 
-    constructor(private httpClient: HttpClient, private fb: FormBuilder) {
+    constructor(private httpClient: HttpClient) {
     }
 
     createCategory(category: Category): Observable<void> {
