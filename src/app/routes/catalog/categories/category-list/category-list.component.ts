@@ -7,7 +7,7 @@ import {ActivatedRoute, Router, RouterLink} from '@angular/router';
 import {CategoryService} from '../shared/category.service';
 import {MatInputModule} from '@angular/material/input';
 import {MatToolbarModule} from '@angular/material/toolbar';
-import {forkJoin} from 'rxjs';
+import {finalize, forkJoin} from 'rxjs';
 import {NotificationService} from '../../../../core/services/notification.service';
 import {FormsModule} from '@angular/forms';
 import {PageFooterComponent} from '../../../../shared/components/page-footer/page-footer.component';
@@ -53,33 +53,14 @@ export class CategoryListComponent implements OnInit {
 
     }
 
-    onDropped(event: CdkDragDrop<any, any>) {
-        const {previousIndex, currentIndex} = event;
-        moveItemInArray(event.container.data, previousIndex, currentIndex);
-        this.table.renderRows();
-    }
-
     addCategory() {
-
-        const newCategory = !!this.parentCategoryId ? <Category>{
-            name: '',
-            parentId: this.parentCategoryId
-        } : <Category>{name: ''};
-        this.newCategories.unshift(newCategory);
+        const newCategory: Category = {name: '', parentId: this.parentCategoryId} as Category;
+        this.newCategories.push(newCategory);
         this.categoryDataSource.data = this.newCategories.concat(this.allCategories);
     }
 
-
-    // todo: 排序
-    onSubmit() {
-        forkJoin(this.newCategories.map(newCategory => this.categoryService.createCategory(newCategory))).subscribe({
-            next: () => this.ngOnInit(),
-            error: err => this.notificationService.notification$.next(`请求未完成，稍后再试！\n\t 失败原因：${err}`),
-        });
-    }
-
     deleteCategory(category: Category, index: number) {
-        if (!!category.id) {
+        if (category.id) {
             this.dialogService.confirmDialog({
                 message: `确定删除分类\"${category.name}\"吗?`,
                 confirmCaption: '是',
@@ -87,12 +68,26 @@ export class CategoryListComponent implements OnInit {
             }).subscribe((choice) => {
                 choice && this.categoryService.deleteCategory(category.id!).subscribe(() => this.ngOnInit());
             });
-
         } else {
+            this.newCategories.splice(index, 1)
             this.categoryDataSource.data.splice(index, 1)
             this.categoryDataSource.data = [...this.categoryDataSource.data];
         }
+    }
 
+    // todo: 排序
+    onDropped(event: CdkDragDrop<any, any>) {
+        const {previousIndex, currentIndex} = event;
+        moveItemInArray(event.container.data, previousIndex, currentIndex);
+        this.table.renderRows();
+    }
 
+    onSubmit() {
+        forkJoin(this.newCategories.map(newCategory => this.categoryService.createCategory(newCategory)))
+            .pipe(finalize(() => this.newCategories = []))
+            .subscribe({
+                next: () => this.ngOnInit(),
+                error: err => this.notificationService.notification$.next(`请求未完成，稍后再试！\n\t 失败原因：${err}`),
+            });
     }
 }

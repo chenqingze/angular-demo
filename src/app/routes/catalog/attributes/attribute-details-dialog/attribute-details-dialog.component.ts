@@ -1,4 +1,4 @@
-import {Component, Inject, OnInit} from '@angular/core';
+import {Component, DestroyRef, Inject, OnInit} from '@angular/core';
 import {MatButtonModule} from '@angular/material/button';
 import {
     MAT_DIALOG_DATA,
@@ -16,7 +16,6 @@ import {AttributeDisplayMode, AttributeType,} from '../shared/attribute';
 import {takeUntilDestroyed} from '@angular/core/rxjs-interop';
 import {CdkDrag, CdkDragDrop, CdkDropList, moveItemInArray} from '@angular/cdk/drag-drop';
 import {AttributeService} from '../shared/attribute.service';
-import {Router} from '@angular/router';
 
 @Component({
     selector: 'app-attribute-details-dialog',
@@ -44,7 +43,6 @@ export class AttributeDetailsDialogComponent implements OnInit {
     protected readonly AttributeDisplayMode = AttributeDisplayMode;
     attributeTypeKeys = Object.keys(this.AttributeType).filter(key => !isNaN(Number(key))).map(key => Number(key));
     attributeDisplayModeKeys = Object.keys(this.AttributeDisplayMode).filter(key => !isNaN(Number(key))).map(key => Number(key));
-    attributeId?: string;
     attributeForm = this.fb.group({
         id: this.fb.control<string | undefined>(undefined),
         name: this.fb.control(''),
@@ -70,32 +68,12 @@ export class AttributeDetailsDialogComponent implements OnInit {
         return this.attributeForm.controls.attributeOptions;
     }
 
-    constructor(@Inject(MAT_DIALOG_DATA) public data: {
-        productClassId?: string
-    }, private router: Router, private fb: NonNullableFormBuilder, private attributeService: AttributeService) {
-        if (data) {
-            const {productClassId} = data;
-            if (productClassId) {
-                this.attributeForm.setControl('productClassId', this.fb.control(productClassId))
-            }
+    constructor(@Inject(MAT_DIALOG_DATA) public productClassId: string, private destroyRef: DestroyRef, private fb: NonNullableFormBuilder, private attributeService: AttributeService) {
+
+        if (productClassId) {
+            this.attributeForm.controls.productClassId.setValue(productClassId);
         }
 
-        this.attributeType.valueChanges
-            .pipe(takeUntilDestroyed())
-            .subscribe(type => {
-                // AttributeType.SELECT 和AttributeOptionType.HIDDEN 类型的属性 有多个属性选项
-                if (type === AttributeType.SELECT || type === AttributeType.HIDDEN) {
-                    this.attributeOptions.clear();
-                    this.addNewAttributeOption();
-                    if (type === AttributeType.HIDDEN) {
-                        this.attributeForm.controls.isVisible.setValue(undefined);
-                    } else {
-                        this.attributeForm.controls.isVisible.setValue(false);
-                    }
-                } else {
-                    this.attributeOptions.clear();
-                }
-            });
     }
 
     addNewAttributeOption() {
@@ -115,6 +93,22 @@ export class AttributeDetailsDialogComponent implements OnInit {
     }
 
     ngOnInit(): void {
+        this.attributeType.valueChanges
+            .pipe(takeUntilDestroyed(this.destroyRef))
+            .subscribe(type => {
+                // AttributeType.SELECT 和AttributeOptionType.HIDDEN 类型的属性 有多个属性选项
+                if (type === AttributeType.SELECT || type === AttributeType.HIDDEN) {
+                    this.attributeOptions.clear();
+                    this.addNewAttributeOption();
+                    if (type === AttributeType.HIDDEN) {
+                        this.attributeForm.controls.isVisible.setValue(undefined);
+                    } else {
+                        this.attributeForm.controls.isVisible.setValue(false);
+                    }
+                } else {
+                    this.attributeOptions.clear();
+                }
+            });
     }
 
     onSubmit() {

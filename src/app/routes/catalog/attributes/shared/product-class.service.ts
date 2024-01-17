@@ -20,4 +20,8 @@ export class ProductClassService {
     findAllProductClasses(): Observable<ProductClass []> {
         return this.httpClient.get<ProductClass []>(this.PATH);
     }
+
+    deleteProductClass(productClassId: string): Observable<void> {
+        return this.httpClient.delete<void>(`${this.PATH}/${productClassId}`);
+    }
 }

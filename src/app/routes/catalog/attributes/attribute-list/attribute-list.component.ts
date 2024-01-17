@@ -9,6 +9,7 @@ import {MatDialog} from '@angular/material/dialog';
 import {AttributeDetailsDialogComponent} from '../attribute-details-dialog/attribute-details-dialog.component';
 import {AttributeService} from '../shared/attribute.service';
 import {CdkDrag, CdkDragDrop, CdkDropList, moveItemInArray} from '@angular/cdk/drag-drop';
+import {ActivatedRoute} from '@angular/router';
 
 @Component({
     selector: 'app-attribute-list',
@@ -27,12 +28,12 @@ import {CdkDrag, CdkDragDrop, CdkDropList, moveItemInArray} from '@angular/cdk/d
 })
 export class AttributeListComponent implements OnInit {
 
-    @Input('productClassId') productClassId?: string;
+    @Input() productClassId?: string;
     @ViewChild(MatTable) table!: MatTable<Attribute>;
     attributeDataSource: MatTableDataSource<Attribute> = new MatTableDataSource<Attribute>([]);
     displayedColumns: string[] = ['dragBox', 'name', 'attributeType', 'isVisible', 'attributeDisplayMode', 'operate'];
 
-    constructor(private dialog: MatDialog, private attributeService: AttributeService) {
+    constructor(private route: ActivatedRoute, private dialog: MatDialog, private attributeService: AttributeService) {
 
     }
 
@@ -51,10 +52,17 @@ export class AttributeListComponent implements OnInit {
     }
 
     addAttribute() {
-        this.dialog.open(AttributeDetailsDialogComponent, {data: this.productClassId}).afterClosed().subscribe(result => result && this.ngOnInit());
+        console.log(this.productClassId)
+        this.dialog.open(AttributeDetailsDialogComponent, {data: this.productClassId})
+            .afterClosed()
+            .subscribe(result => {
+                if (result) {
+                    this.ngOnInit();
+                }
+            });
     }
 
-    deleteAttribute(attribute: Attribute) {
-
+    deleteAttribute(attributeId: string) {
+        this.attributeService.deleteAttribute(attributeId).subscribe(() => this.ngOnInit());
     }
 }

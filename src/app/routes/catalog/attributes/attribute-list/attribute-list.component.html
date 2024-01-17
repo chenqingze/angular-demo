@@ -1,3 +1,4 @@
+<!-- todo:处理头部，当全局属性和类别属性page header不相同，面包屑页层级不一样 -->
 <div class="button-container">
     <button mat-raised-button type="button" (click)="addAttribute()" class="button">
         添加属性
@@ -52,7 +53,7 @@
             <button mat-icon-button type="button">
                 <mat-icon fontSet="material-icons-outlined">edit</mat-icon>
             </button>
-            <button mat-icon-button type="button" (click)="deleteAttribute(element)">
+            <button mat-icon-button type="button" (click)="deleteAttribute(element.id)">
                 <mat-icon fontSet="material-icons-outlined">delete</mat-icon>
             </button>
         </td>

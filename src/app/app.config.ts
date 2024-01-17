@@ -1,5 +1,5 @@
 import {ApplicationConfig} from '@angular/core';
-import {provideRouter} from '@angular/router';
+import {provideRouter, withComponentInputBinding} from '@angular/router';
 
 import {routes} from './app.routes';
 import {provideClientHydration} from '@angular/platform-browser';
@@ -38,7 +38,7 @@ export const appConfig: ApplicationConfig = {
             },
         },
         {provide: MAT_FORM_FIELD_DEFAULT_OPTIONS, useValue: {appearance: 'outline'}}, //Appearance Options — Set Globally
-        provideRouter(routes),
+        provideRouter(routes, withComponentInputBinding()),
         provideHttpClient(
             withFetch(),
             withInterceptors([

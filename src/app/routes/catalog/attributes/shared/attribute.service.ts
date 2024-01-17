@@ -39,7 +39,7 @@ export class AttributeService {
     }
 
     findAllProductClassAttributes(productClassId: string): Observable<Attribute[]> {
-        return this.httpClient.get<Attribute[]>(`/catalog/${productClassId}/attributes`);
+        return this.httpClient.get<Attribute[]>(`/catalog/product-classes/${productClassId}/attributes`);
     }
 
 }

@@ -7,9 +7,11 @@ import {ProductClass} from '../shared/attribute';
 import {CdkDrag, CdkDragDrop, CdkDropList, moveItemInArray} from '@angular/cdk/drag-drop';
 import {FormsModule} from '@angular/forms';
 import {PageFooterComponent} from '../../../../shared/components/page-footer/page-footer.component';
-import {forkJoin} from 'rxjs';
+import {finalize, forkJoin} from 'rxjs';
 import {ProductClassService} from '../shared/product-class.service';
 import {NotificationService} from '../../../../core/services/notification.service';
+import {RouterLink} from '@angular/router';
+import {DialogService} from '../../../../core/services/dialog.service';
 
 @Component({
     selector: 'app-product-class-list',
@@ -22,7 +24,8 @@ import {NotificationService} from '../../../../core/services/notification.servic
         CdkDropList,
         FormsModule,
         PageFooterComponent,
-        CdkDrag
+        CdkDrag,
+        RouterLink
     ],
     templateUrl: './product-class-list.component.html',
     styleUrl: './product-class-list.component.scss'
@@ -34,13 +37,14 @@ export class ProductClassListComponent implements OnInit {
     allProductClasses: ProductClass [] = [];
     newProductClasses: ProductClass[] = [];
 
-    constructor(private productClassService: ProductClassService, private notificationService: NotificationService) {
+    constructor(private productClassService: ProductClassService, private dialogService: DialogService, private notificationService: NotificationService) {
     }
 
     ngOnInit(): void {
         this.productClassService.findAllProductClasses().subscribe(result => {
             this.allProductClasses = result;
             this.productClassDataSource.data = this.allProductClasses;
+            this.newProductClasses = [];
         })
     }
 
@@ -48,14 +52,23 @@ export class ProductClassListComponent implements OnInit {
         const productClass: ProductClass = {name: '', displayOrder: 0};
         this.newProductClasses.push(productClass);
         this.productClassDataSource.data = this.newProductClasses.concat(this.allProductClasses);
-        console.log("this.newProductClasses", this.newProductClasses)
-        console.log("this.productClassDataSource.data", this.productClassDataSource.data)
     }
 
-    edit(element: ProductClass) {
-
+    deleteProductClass(productClass: ProductClass, index: number) {
+        if (productClass.id) {
+            this.dialogService.confirmDialog({
+                message: `确定删除类别\"${productClass.name}\"吗?`,
+                confirmCaption: '是',
+                cancelCaption: '否',
+            }).subscribe((choice) => {
+                choice && this.productClassService.deleteProductClass(productClass.id!).subscribe(() => this.ngOnInit());
+            });
+        } else {
+            this.newProductClasses.splice(index, 1);
+            this.productClassDataSource.data.splice(index, 1)
+            this.productClassDataSource.data = [...this.productClassDataSource.data];
+        }
     }
-
 
     onDropped(event: CdkDragDrop<any, any>) {
         const {previousIndex, currentIndex} = event;
@@ -64,9 +77,13 @@ export class ProductClassListComponent implements OnInit {
     }
 
     onSubmit() {
-        forkJoin(this.newProductClasses.map(newProductClass => this.productClassService.createProductClass(newProductClass))).subscribe({
-            next: () => this.ngOnInit(),
-            error: err => this.notificationService.notification$.next(`请求未完成，稍后再试！\n\t 失败原因：${err}`),
-        });
+        forkJoin(this.newProductClasses.map(newProductClass => this.productClassService.createProductClass(newProductClass)))
+            .pipe(finalize(() => this.newProductClasses = []))
+            .subscribe({
+                next: () => this.ngOnInit(),
+                error: err => this.notificationService.notification$.next(`请求未完成，稍后再试！\n\t 失败原因：${err}`),
+            });
     }
+
+
 }
