@@ -1,9 +1,9 @@
-<mat-tab-group #tabGroup>
+<mat-tab-group mat-stretch-tabs="false" mat-align-tabs="start" #tabGroup>
     <mat-tab label="详情">
         <ng-template matTabContent>
             <form [formGroup]="categoryDetailsFrom" (ngSubmit)="onSubmit()">
                 <mat-card>
-                    <mat-card-content class="card-content">
+                    <mat-card-content class="content">
                         <mat-form-field>
                             <mat-label>分类名称</mat-label>
                             <input matInput type="text" formControlName="name">

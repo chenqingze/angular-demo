@@ -13,6 +13,10 @@ export class CategoryService {
     constructor(private httpClient: HttpClient) {
     }
 
+    createCategoryWithReturnCategoryItem(category: Category): Observable<Category> {
+        return this.httpClient.post<Category>(this.PATH, category);
+    }
+
     createCategory(category: Category): Observable<void> {
         return this.httpClient.post<void>(this.PATH, category);
     }

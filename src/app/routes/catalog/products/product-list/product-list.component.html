@@ -1,1 +1,127 @@
-<p>product-list works!</p>
+<!--todo:page-header and breadcrumb-->
+<!--todo:product filter-->
+
+<div class="button-container">
+    <button mat-raised-button type="button" [routerLink]="['/products/add']" class="button">
+        添加产品
+    </button>
+</div>
+<table mat-table #table [dataSource]="productDataSource" class="mat-elevation-z8 table">
+    <ng-container matColumnDef="select">
+        <th mat-header-cell *matHeaderCellDef>
+            <mat-checkbox (change)="$event ? toggleAllRows() : null"
+                          [checked]="selection.hasValue() && isAllSelected()"
+                          [indeterminate]="selection.hasValue() && !isAllSelected()"
+                          [aria-label]="checkboxLabel()">
+            </mat-checkbox>
+        </th>
+        <td mat-cell *matCellDef="let row">
+            <mat-checkbox (click)="$event.stopPropagation()"
+                          (change)="$event ? selection.toggle(row) : null"
+                          [checked]="selection.isSelected(row)"
+                          [aria-label]="checkboxLabel(row)">
+            </mat-checkbox>
+        </td>
+    </ng-container>
+    <!-- enabled Column -->
+    <ng-container matColumnDef="enabled">
+        <th mat-header-cell *matHeaderCellDef>enabled</th>
+        <td mat-cell *matCellDef="let element">{{ element.enabled }}</td>
+    </ng-container>
+
+    <!-- sku Column -->
+    <ng-container matColumnDef="sku">
+        <th mat-header-cell *matHeaderCellDef>SKU</th>
+        <td mat-cell *matCellDef="let element">{{ element.sku }}</td>
+    </ng-container>
+
+    <!-- name Column -->
+    <ng-container matColumnDef="name">
+        <th mat-header-cell *matHeaderCellDef>产品名称</th>
+        <td mat-cell *matCellDef="let element">{{ element.name }}</td>
+    </ng-container>
+
+    <!-- categories Column -->
+    <ng-container matColumnDef="categories">
+        <th mat-header-cell *matHeaderCellDef>产品名称</th>
+        <td mat-cell *matCellDef="let element">{{ element.categories.join() }}</td>
+    </ng-container>
+
+    <!-- price Column -->
+    <ng-container matColumnDef="price">
+        <th mat-header-cell *matHeaderCellDef>价格</th>
+        <td mat-cell *matCellDef="let element">{{ element.price }}</td>
+    </ng-container>
+
+    <!-- costPrice Column -->
+    <ng-container matColumnDef="costPrice">
+        <th mat-header-cell *matHeaderCellDef>成本</th>
+        <td mat-cell *matCellDef="let element">{{ element.costPrice }}</td>
+    </ng-container>
+
+    <!-- todo:库存 stock Column -->
+
+    <!--  operate -->
+    <ng-container matColumnDef="operate">
+        <th mat-header-cell *matHeaderCellDef></th>
+        <td mat-cell *matCellDef="let element;index as i">
+            <button mat-icon-button type="button" (click)="deleteProduct(element.id)">
+                <mat-icon fontIcon="delete"></mat-icon>
+            </button>
+        </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row cdkDrag *matRowDef="let row; columns: displayedColumns;"></tr>
+</table>
+<page-footer>
+    <ng-container buttons>
+        <button mat-raised-button type="submit">保存修改</button>
+        或
+        <div class="button-group">
+            <button mat-raised-button type="button" [matMenuTriggerFor]="bulkEditAllMenu">
+                <mat-icon fontIcon="arrow_drop_up"></mat-icon>
+                <span>批量编辑</span>
+            </button>
+            <mat-menu #bulkEditAllMenu="matMenu" yPosition="above">
+                <button mat-menu-item>批量操作1</button>
+                <button mat-menu-item>批量操作1</button>
+            </mat-menu>
+            <button mat-raised-button type="button" [matMenuTriggerFor]="enabledMenu">
+                <mat-icon fontIcon="arrow_drop_up"></mat-icon>
+                <mat-icon fontIcon="power_settings_new"></mat-icon>
+            </button>
+            <mat-menu #enabledMenu="matMenu" yPosition="above">
+                <button mat-menu-item>
+                    <mat-icon fontIcon="power_settings_new" color="primary"></mat-icon>
+                    启用
+                </button>
+                <button mat-menu-item>
+                    <mat-icon fontIcon="power_settings_new"></mat-icon>
+                    禁用
+                </button>
+            </mat-menu>
+            @if (selection.hasValue()) {
+                <button mat-raised-button type="button">
+                    <mat-icon fontIcon="arrow_drop_up"></mat-icon>
+                    <mat-icon fontIcon="delete"></mat-icon>
+                </button>
+            }
+        </div>
+        @if (selection.hasValue()) {
+            <button mat-raised-button type="button">
+                <mat-icon fontIcon="arrow_drop_up"></mat-icon>
+                <mat-icon fontIcon="delete"></mat-icon>
+            </button>
+        }
+        <button mat-raised-button type="submit" [matMenuTriggerFor]="exportMenu">
+            {{ selection.hasValue() ? '导出所选产品' : '导出所有产品' }}
+            <mat-icon fontIcon="arrow_drop_up"></mat-icon>
+        </button>
+        <mat-menu #exportMenu="matMenu" yPosition="above">
+            <button mat-menu-item>Excel</button>
+            <button mat-menu-item>Csv</button>
+            <button mat-menu-item>Open Document</button>
+        </mat-menu>
+    </ng-container>
+</page-footer>

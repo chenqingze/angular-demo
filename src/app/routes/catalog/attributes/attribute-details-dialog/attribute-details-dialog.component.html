@@ -2,7 +2,7 @@
     <div class="header">
         <h2 mat-dialog-title>添加属性</h2>
         <button mat-icon-button type="button" [mat-dialog-close]="false">
-            <mat-icon>close</mat-icon>
+            <mat-icon fontIcon="close"></mat-icon>
         </button>
     </div>
 
@@ -97,10 +97,10 @@
                             <mat-icon class="drag-box" fontIcon="drag_indicator"></mat-icon>
                             <input matNativeControl type="text" formControlName="name">
                             @if (index !== 0) {
-                                <mat-icon fontSet="material-icons-outlined">delete</mat-icon>
+                                <mat-icon fontIcon="delete"></mat-icon>
                             }
                             @if (index + 1 === attributeOptions.length) {
-                                <mat-icon (click)="addNewAttributeOption()" fontSet="material-icons-outlined">add_box
+                                <mat-icon (click)="addNewAttributeOption()" fontIcon="add_box">
                                 </mat-icon>
                             }
                         </div>

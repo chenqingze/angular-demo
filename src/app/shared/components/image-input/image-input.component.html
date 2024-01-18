@@ -13,11 +13,11 @@
     @if (value!.length < maxCount) {
         <div class="image-upload-content" [ngStyle]="{ 'margin-top': value ? '5px' : '20px'}">
             <!-- no image or value.length< maxLength -->
-            <mat-icon style="opacity: 60%;">file_upload</mat-icon>
+            <mat-icon style="opacity: 60%;" fontIcon="file_upload"></mat-icon>
             <button mat-raised-button type="button" color="primary" style="width:100%; opacity: 80%;">
-                Browser
+                浏览
             </button>
-            <small style="margin: 20px">Drag and drop here</small>
+            <small style="margin: 20px">或拖拽到此处</small>
             <!-- put on top of the image-upload-content with opacity 0 -->
             <input type="file" class="upload-button" (change)="onFileSelected($event)" [accept]="imageType"
                    [multiple]="multiple">

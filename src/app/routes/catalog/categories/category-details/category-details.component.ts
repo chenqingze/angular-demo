@@ -66,7 +66,7 @@ export class CategoryDetailsComponent implements OnInit {
     }
 
     ngOnInit(): void {
-        // console.log('======categoryId=======', this.categoryId);
+        console.log('======categoryId=======', this.categoryId);
     }
 
     onSubmit() {
