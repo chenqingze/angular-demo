@@ -14,7 +14,7 @@ export class CategoryService {
     }
 
     createCategoryWithReturnCategoryItem(category: Category): Observable<Category> {
-        return this.httpClient.post<Category>(this.PATH, category);
+        return this.httpClient.post<Category>(`${this.PATH}/return`, category);
     }
 
     createCategory(category: Category): Observable<void> {

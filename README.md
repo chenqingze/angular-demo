@@ -73,7 +73,7 @@ the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
         - [ ] 对分类内的推荐产品进行排序
     - [ ] 导入/导出分类
 
-- [ ] 产品类别与产品属性模块
+- [ ] 产品类别与产品属性
     - [ ] 产品类别管理
         - [x] 查看类别列表
         - [x] 添加类别
@@ -101,7 +101,7 @@ the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
             - [ ] 删除属性分组
             - [ ] 分配属性到分组
 
--[ ] 产品管理模块
+-[ ] 产品管理
     - [ ] 产品列表
     - [ ] 添加产品
     - [ ] 删除产品
@@ -111,13 +111,14 @@ the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
     - [ ] 推荐产品列表
     - [ ] 特定产品属性管理
     - [ ] 为产品添加属性值
+    - [ ] 产品变体管理
 
 -[ ] 库存管理
 
--[ ] 订单管理模块
+-[ ] 订单管理
 
 -[ ] 收银管理
 
--[ ] 配送管理模块
+-[ ] 配送管理
 
--[ ] 客户(会员)管理模块
+-[ ] 客户(会员)管理

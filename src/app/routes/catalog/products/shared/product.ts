@@ -12,18 +12,18 @@ export interface Product {
     id?: string;
     externalId?: string;
     name: string;
-    sku: string
+    sku?: string
     gtin?: string;
     /** Manufacturer part number (MPN) or model number */
     model?: string;
     manufacturer?: string;
-    marketPrice?: number;
+    marketPrice?: string;
     price?: string;
     costPrice?: string;
     enabled?: boolean;
     // isOnSale?: boolean
-    discountMode: DiscountType;
-    discountValue: string;
+    discountType?: DiscountType;
+    discountValue?: string;
     minThreshold?: number;
     maxThreshold?: number;
     dimension?: Dimension;
