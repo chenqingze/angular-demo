@@ -1,0 +1,25 @@
+<mat-tab-group mat-stretch-tabs="false" mat-align-tabs="start" #tabGroup>
+    <mat-tab label="详情">
+        <ng-template matTabContent>
+            <app-add-edit-product [productId]="productId"></app-add-edit-product>
+        </ng-template>
+    </mat-tab>
+    <mat-tab label="产品属性">
+        <ng-template matTabContent>
+        </ng-template>
+    </mat-tab>
+    <mat-tab label="库存">
+        <ng-template matTabContent>
+        </ng-template>
+    </mat-tab>
+    <mat-tab label="相关产品">
+        <ng-template matTabContent>
+
+        </ng-template>
+    </mat-tab>
+    <mat-tab label="评价">
+        <ng-template matTabContent>
+
+        </ng-template>
+    </mat-tab>
+</mat-tab-group>

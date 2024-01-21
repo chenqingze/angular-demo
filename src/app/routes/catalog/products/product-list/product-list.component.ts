@@ -1,4 +1,4 @@
-import {Component, OnInit, ViewChild} from '@angular/core';
+import {AfterViewInit, Component, OnInit, ViewChild} from '@angular/core';
 import {CdkDrag, CdkDropList} from '@angular/cdk/drag-drop';
 import {MatButtonModule} from '@angular/material/button';
 import {MatIconModule} from '@angular/material/icon';
@@ -13,6 +13,7 @@ import {SelectionModel} from '@angular/cdk/collections';
 import {PageFooterComponent} from '../../../../shared/components/page-footer/page-footer.component';
 import {MatButtonToggleModule} from '@angular/material/button-toggle';
 import {MatMenuModule} from '@angular/material/menu';
+import {MatPaginator, MatPaginatorModule, PageEvent} from '@angular/material/paginator';
 
 @Component({
     selector: 'app-product-list',
@@ -28,15 +29,20 @@ import {MatMenuModule} from '@angular/material/menu';
         PageFooterComponent,
         MatButtonToggleModule,
         MatMenuModule,
-        RouterLink
+        RouterLink,
+        MatPaginatorModule
     ],
     templateUrl: './product-list.component.html',
     styleUrl: './product-list.component.scss'
 })
-export class ProductListComponent implements OnInit {
+export class ProductListComponent implements OnInit, AfterViewInit {
     @ViewChild(MatTable) table!: MatTable<Attribute>;
+    @ViewChild(MatPaginator) paginator!: MatPaginator;
+    pageSize = 10;
+
+    pageSizeOptions = [5, 10, 25];
     productDataSource: MatTableDataSource<Product> = new MatTableDataSource<Product>([]);
-    displayedColumns: string[] = ['select', 'enabled', 'name', 'categories', 'price', 'costPrice', 'operate'];
+    displayedColumns: string[] = ['select', 'enabled', 'name', 'price', 'costPrice', 'operate'];
     selection = new SelectionModel<Product>(true, []);
 
     /** Whether the number of selected elements matches the total number of rows. */
@@ -68,9 +74,37 @@ export class ProductListComponent implements OnInit {
     }
 
     ngOnInit(): void {
+        this.loadPageData();
+    }
+
+    ngAfterViewInit() {
+        this.productDataSource.paginator = this.paginator;
     }
 
     deleteProduct(productId: string) {
 
+    }
+
+    onPage(event: PageEvent) {
+        this.selection.clear();
+        const previousPageIndex = event.previousPageIndex;
+        const pageIndex = event?.pageIndex || 0;
+        const pageSize = event?.pageSize;
+        if (pageSize) {
+            this.loadPageData(0, pageSize);
+        } else {
+            this.loadPageData(pageIndex, this.paginator.pageSize);
+        }
+
+        return event;
+    }
+
+    loadPageData(pageIndex = 0, pageSize = 10) {
+        this.productService.getProducts(pageIndex, pageSize).subscribe(page => {
+            this.productDataSource.data = page.content;
+            this.paginator.pageIndex = page.number;
+            this.paginator.pageSize = page.size;
+            this.paginator.length = page.totalElements;
+        });
     }
 }

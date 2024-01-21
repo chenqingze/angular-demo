@@ -38,14 +38,15 @@
     <!-- name Column -->
     <ng-container matColumnDef="name">
         <th mat-header-cell *matHeaderCellDef>产品名称</th>
-        <td mat-cell *matCellDef="let element">{{ element.name }}</td>
+        <td mat-cell *matCellDef="let element"><a routerLink="/products/details/{{element.id}}">{{ element.name }}</a>
+        </td>
     </ng-container>
 
     <!-- categories Column -->
-    <ng-container matColumnDef="categories">
+    <!--<ng-container matColumnDef="categories">
         <th mat-header-cell *matHeaderCellDef>产品名称</th>
         <td mat-cell *matCellDef="let element">{{ element.categories.join() }}</td>
-    </ng-container>
+    </ng-container>-->
 
     <!-- price Column -->
     <ng-container matColumnDef="price">
@@ -74,6 +75,11 @@
     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
     <tr mat-row cdkDrag *matRowDef="let row; columns: displayedColumns;"></tr>
 </table>
+<mat-paginator (page)="onPage($event)" [pageSizeOptions]="pageSizeOptions"
+               showFirstLastButtons
+               aria-label="Select page of product elements">
+</mat-paginator>
+
 <page-footer>
     <ng-container buttons>
         <button mat-raised-button type="submit">保存修改</button>

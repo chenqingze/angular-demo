@@ -10,7 +10,6 @@ interface Category {
     /** 富文本 */
     description?: string
     displayOrder?: number
-    subcategoryCount?: number
     parentId?: string
     path?: string
     depth?: number

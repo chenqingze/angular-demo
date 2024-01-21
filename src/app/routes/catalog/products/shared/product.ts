@@ -1,7 +1,6 @@
 import {ProductClass} from '../../attributes/shared/attribute';
 import {Image} from '../../../../shared/models/file';
 import {Brand} from '../../brands/shared/brand';
-import {Category} from '../../categories/shared/category';
 
 export type AttributeType = string | 'SELECT' | 'TEXTAREA' | 'CHECKBOX' | 'HIDDEN'
 export type AttributeDisplayMode = string | 'BLOCKS' | 'SELECT_BOX'
@@ -29,16 +28,16 @@ export interface Product {
     dimension?: Dimension;
     weight?: number;
     weightUnits?: string;
-    images?: Image[]
-    description?: string
-    fullDescription?: string
-    isOnline?: boolean
-    activeStartAt?: any
-    activeEndAt?: any
-    brand?: Brand
-    categories?: Category[]
-    productClass?: ProductClass
-    attributeValues?: AttributeValue[]
+    images?: Image[];
+    description?: string;
+    fullDescription?: string;
+    isOnline?: boolean;
+    activeStartAt?: any;
+    activeEndAt?: any;
+    brand?: Brand;
+    categoryIds?: string [];
+    productClass?: ProductClass;
+    attributeValues?: AttributeValue[];
 }
 
 export interface Dimension {

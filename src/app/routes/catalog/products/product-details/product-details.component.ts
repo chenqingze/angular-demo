@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, Input, OnInit} from '@angular/core';
 import {CdkDrag, CdkDropList} from '@angular/cdk/drag-drop';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {MatButtonModule} from '@angular/material/button';
@@ -18,6 +18,9 @@ import {MatChipsModule} from '@angular/material/chips';
 import {MatAutocompleteModule} from '@angular/material/autocomplete';
 import {AsyncPipe} from '@angular/common';
 import {NumericDirective} from '../../../../shared/directives/numeric.directive';
+import {CategoryListComponent} from '../../categories/category-list/category-list.component';
+import {MatTabsModule} from '@angular/material/tabs';
+import {AddEditProductComponent} from '../add-edit-product/add-edit-product.component';
 
 @Component({
     selector: 'app-product-details',
@@ -45,12 +48,16 @@ import {NumericDirective} from '../../../../shared/directives/numeric.directive'
         MatChipsModule,
         MatAutocompleteModule,
         AsyncPipe,
-        NumericDirective
+        NumericDirective,
+        CategoryListComponent,
+        MatTabsModule,
+        AddEditProductComponent
     ],
     templateUrl: './product-details.component.html',
     styleUrl: './product-details.component.scss'
 })
 export class ProductDetailsComponent implements OnInit {
+    @Input('id') productId!: string;
 
 
     constructor() {

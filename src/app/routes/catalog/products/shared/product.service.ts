@@ -1,7 +1,8 @@
 import {Injectable} from '@angular/core';
-import {HttpClient} from '@angular/common/http';
+import {HttpClient, HttpParams} from '@angular/common/http';
 import {Product} from './product';
 import {Observable} from 'rxjs';
+import {Page} from '../../../../shared/models/page';
 
 @Injectable({
     providedIn: 'root'
@@ -23,5 +24,14 @@ export class ProductService {
 
     public deleteProduct(productId: string): Observable<void> {
         return this.httpClient.delete<void>(`${this.PATH}/${productId}`);
+    }
+
+    getProducts(page: number, size: number): Observable<Page<Product>> {
+        let params = new HttpParams().append('page', page).append('size', size);
+        return this.httpClient.get<Page<Product>>(this.PATH, {params: params});
+    }
+
+    getProduct(id: string): Observable<Product> {
+        return this.httpClient.get<Product>(`${this.PATH}/${id}`);
     }
 }

@@ -1,4 +1,4 @@
-import {Component, ElementRef, ViewChild} from '@angular/core';
+import {Component, ElementRef, Input, OnInit, ViewChild} from '@angular/core';
 import {AsyncPipe} from '@angular/common';
 import {FormControl, FormsModule, NonNullableFormBuilder, ReactiveFormsModule, Validators} from '@angular/forms';
 import {ImageInputComponent} from '../../../../shared/components/image-input/image-input.component';
@@ -19,14 +19,14 @@ import {BehaviorSubject, map, Observable, startWith} from 'rxjs';
 import {Category} from '../../categories/shared/category';
 import {Image} from '../../../../shared/models/file';
 import {LiveAnnouncer} from '@angular/cdk/a11y';
+import {Router} from '@angular/router';
 import {ProductService} from '../shared/product.service';
 import {CategoryService} from '../../categories/shared/category.service';
 import {takeUntilDestroyed} from '@angular/core/rxjs-interop';
 import {Product} from '../shared/product';
-import {Router} from '@angular/router';
 
 @Component({
-    selector: 'app-add-product',
+    selector: 'app-add-edit-product',
     standalone: true,
     imports: [
         AsyncPipe,
@@ -46,10 +46,11 @@ import {Router} from '@angular/router';
         PageFooterComponent,
         ReactiveFormsModule
     ],
-    templateUrl: './add-product.component.html',
-    styleUrl: './add-product.component.scss'
+    templateUrl: './add-edit-product.component.html',
+    styleUrl: './add-edit-product.component.scss'
 })
-export class AddProductComponent {
+export class AddEditProductComponent implements OnInit {
+    @Input() productId: string | undefined;
     separatorKeysCodes: number[] = [ENTER, COMMA];
     filteredCategories!: Observable<Category []>;
     categoryCtrl = new FormControl('');
@@ -58,6 +59,7 @@ export class AddProductComponent {
     categoriesSub = new BehaviorSubject<Category[]>(this.categories);
     allCategories: Category [] = [];
     productForm = this.fb.group({
+        id: this.fb.control<string | undefined>(undefined),
         name: this.fb.control<string>('', Validators.required),
         sku: this.fb.control<string | undefined>(undefined),
         images: this.fb.control<Image [] | undefined>([]),
@@ -65,7 +67,7 @@ export class AddProductComponent {
         description: this.fb.control<string | undefined>(''),
         fullDescription: this.fb.control<string | undefined>(''),
         enabled: this.fb.control(true),
-        price: this.fb.control<string>('0.00'),
+        price: this.fb.control<string | undefined>('0.00'),
         marketPrice: this.fb.control<string | undefined>(undefined),
         constPrice: this.fb.control<string | undefined>(undefined)
     });
@@ -91,6 +93,15 @@ export class AddProductComponent {
                 map((categoryName: string | null) => (categoryName ? this._filter(categoryName) : this.allCategories.slice())),
             );
         });
+
+        if (this.productId) {
+            this.productService.getProduct(this.productId).subscribe(result => {
+
+                this.productForm.patchValue(result);
+                const {categoryIds = []} = result;
+                this.categories = this.allCategories.filter(category => categoryIds.includes(category.id!));
+            });
+        }
     }
 
     selected(event: MatAutocompleteSelectedEvent): void {
@@ -135,6 +146,4 @@ export class AddProductComponent {
         const product: Product = this.productForm.getRawValue();
         this.productService.createProduct(product).subscribe(() => this.router.navigate(['/products']));
     }
-
-
 }
