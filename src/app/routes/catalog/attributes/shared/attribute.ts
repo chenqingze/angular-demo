@@ -1,7 +1,7 @@
 enum AttributeType {
     SELECT,
     TEXTAREA,
-    BOOLEAN,
+    CHECKBOX,
     HIDDEN
 }
 
@@ -41,7 +41,7 @@ interface Attribute {
     attributeGroupId?: string;
     productClassId?: string;
     productId?: string;
-    attributeOptions: AttributeOption [];
+    attributeOptions?: AttributeOption [];
 }
 
 

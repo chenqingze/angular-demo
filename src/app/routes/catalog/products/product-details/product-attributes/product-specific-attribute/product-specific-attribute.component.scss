@@ -1,0 +1,13 @@
+.product-specific-attribute-container {
+  display: flex;
+  flex-flow: column nowrap;
+  max-width: 50rem;
+
+  .title {
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: space-between;
+    align-items: center;
+  }
+}
+

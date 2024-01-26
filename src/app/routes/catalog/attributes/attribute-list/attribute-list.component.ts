@@ -52,8 +52,14 @@ export class AttributeListComponent implements OnInit {
     }
 
     addAttribute() {
-        console.log(this.productClassId)
-        this.dialog.open(AttributeDetailsDialogComponent, {data: this.productClassId})
+        // console.log(this.productClassId)
+        this.dialog.open(AttributeDetailsDialogComponent, {data: {productClassId: this.productClassId}})
+            .afterClosed()
+            .subscribe(result => result && this.ngOnInit());
+    }
+
+    editAttribute(attributeId: string) {
+        this.dialog.open(AttributeDetailsDialogComponent, {data: {productClassId: this.productClassId, attributeId}})
             .afterClosed()
             .subscribe(result => {
                 if (result) {
@@ -65,4 +71,6 @@ export class AttributeListComponent implements OnInit {
     deleteAttribute(attributeId: string) {
         this.attributeService.deleteAttribute(attributeId).subscribe(() => this.ngOnInit());
     }
+
+
 }

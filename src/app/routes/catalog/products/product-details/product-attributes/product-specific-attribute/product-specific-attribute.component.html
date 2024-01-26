@@ -1,0 +1,44 @@
+<form formGroupName="productSpecificAttributeForm" (ngSubmit)="onSubmit()">
+    <div class="product-specific-attribute-container">
+        <div class="title">
+            <h2>产品私有属性</h2>
+            <button mat-raised-button [matMenuTriggerFor]="menu">添加属性
+                <mat-icon fontIcon="arrow_drop_down"></mat-icon>
+            </button>
+            <mat-menu #menu="matMenu">
+                <button mat-menu-item (click)="addAttribute(AttributeType.SELECT)">普通文本</button>
+                <button mat-menu-item (click)="addAttribute(AttributeType.TEXTAREA)">文本区</button>
+                <button mat-menu-item (click)="addAttribute(AttributeType.CHECKBOX)">是/否</button>
+            </mat-menu>
+        </div>
+        <div class="content" formArrayName="attributes">
+            @for (attribute of attributes.controls;track $index) {
+                <div class="attribute">
+                    <!-- @switch ()-->
+                    <!-- select -->
+                    <mat-form-field>
+                        <input matInput formControlName="name">
+                    </mat-form-field>
+                    <div class="attribute-option">
+                        <mat-form-field>
+                            <input matInput formControlName="name">
+                        </mat-form-field>
+                        <mat-icon fontIcon="delete"></mat-icon>
+                    </div>
+                    <mat-icon fontIcon="delete"></mat-icon>
+                    <!--  textarea -->
+
+                    <!--  checkbox -->
+                </div>
+            }
+
+        </div>
+    </div>
+    <page-footer>
+        <ng-container buttons>
+            <button mat-raised-button type="submit"
+                    [disabled]="productSpecificAttributeForm.invalid&&productSpecificAttributeForm.pristine">保存
+            </button>
+        </ng-container>
+    </page-footer>
+</form>

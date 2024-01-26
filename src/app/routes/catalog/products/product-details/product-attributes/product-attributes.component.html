@@ -1,0 +1,20 @@
+<mat-button-toggle-group #attributeGroup="matButtonToggleGroup">
+    <mat-button-toggle value="product-specific-attribute" checked="true">私有属性</mat-button-toggle>
+    <mat-button-toggle value="product-class-attribute">类别属性</mat-button-toggle>
+    <mat-button-toggle value="global-attribute">全局属性</mat-button-toggle>
+    <mat-button-toggle value="hidden-attribute">隐藏属性</mat-button-toggle>
+</mat-button-toggle-group>
+@switch (attributeGroup.value) {
+    @case ('product-specific-attribute') {
+        <app-product-specific-attribute></app-product-specific-attribute>
+    }
+    @case ('product-class-attribute') {
+        <app-product-class-attribute></app-product-class-attribute>
+    }
+    @case ('global-attribute') {
+        <app-global-attribute></app-global-attribute>
+    }
+    @case ('hidden-attribute') {
+        <app-hidden-attribute></app-hidden-attribute>
+    }
+}

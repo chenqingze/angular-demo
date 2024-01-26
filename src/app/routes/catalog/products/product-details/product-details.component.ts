@@ -21,6 +21,7 @@ import {NumericDirective} from '../../../../shared/directives/numeric.directive'
 import {CategoryListComponent} from '../../categories/category-list/category-list.component';
 import {MatTabsModule} from '@angular/material/tabs';
 import {AddEditProductComponent} from '../add-edit-product/add-edit-product.component';
+import {ProductAttributesComponent} from './product-attributes/product-attributes.component';
 
 @Component({
     selector: 'app-product-details',
@@ -51,7 +52,8 @@ import {AddEditProductComponent} from '../add-edit-product/add-edit-product.comp
         NumericDirective,
         CategoryListComponent,
         MatTabsModule,
-        AddEditProductComponent
+        AddEditProductComponent,
+        ProductAttributesComponent,
     ],
     templateUrl: './product-details.component.html',
     styleUrl: './product-details.component.scss'
