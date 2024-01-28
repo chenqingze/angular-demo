@@ -1,14 +1,7 @@
-enum AttributeType {
-    SELECT,
-    TEXTAREA,
-    CHECKBOX,
-    HIDDEN
-}
-
-enum AttributeDisplayMode {
-    BLOCKS,
-    SELECT_BOX
-}
+const AttributeTypes = ['SELECT', 'TEXTAREA', 'CHECKBOX', 'HIDDEN'] as const
+type AttributeType = typeof AttributeTypes[number];
+const AttributeDisplayModes = ['BLOCKS', 'SELECT_BOX'] as const;
+type AttributeDisplayMode = typeof AttributeDisplayModes[number];
 
 interface AttributeGroup {
     id?: string;
@@ -46,7 +39,9 @@ interface Attribute {
 
 
 export {
+    AttributeTypes,
     AttributeType,
+    AttributeDisplayModes,
     AttributeDisplayMode,
     AttributeGroup,
     AttributeOption,

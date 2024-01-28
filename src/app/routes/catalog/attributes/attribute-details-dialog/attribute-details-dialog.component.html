@@ -25,26 +25,26 @@
         <mat-form-field>
             <mat-label>类型</mat-label>
             <mat-select formControlName="attributeType">
-                @for (typeKey of attributeTypeKeys;track $index) {
-                    <mat-option [value]="typeKey"> {{ AttributeType[typeKey] }}</mat-option>
+                @for (type of AttributeTypes;track $index) {
+                    <mat-option [value]="type"> {{ type }}</mat-option>
                 }
             </mat-select>
         </mat-form-field>
 
         <!-- attributeDisplayMode -->
-        @if (attributeType.value === AttributeType.SELECT) {
+        @if (attributeType.value === 'SELECT') {
             <mat-form-field>
                 <mat-label>显示样式</mat-label>
                 <mat-select formControlName="attributeDisplayMode">
-                    @for (modeKey of attributeDisplayModeKeys;track $index) {
-                        <mat-option [value]="modeKey">{{ AttributeDisplayMode[modeKey] }}</mat-option>
+                    @for (mode of AttributeDisplayModes;track $index) {
+                        <mat-option [value]="mode">{{ mode }}</mat-option>
                     }
                 </mat-select>
             </mat-form-field>
         }
 
         <!-- isVisible -->
-        @if (attributeType.value !== AttributeType.HIDDEN) {
+        @if (attributeType.value !== 'HIDDEN') {
             <mat-form-field>
                 <mat-label>是否作为产品选项显示</mat-label>
                 <mat-select formControlName="isVisible">
@@ -88,19 +88,19 @@
          }-->
 
         <!-- attributeOptions -->
-        @if (attributeType.value === AttributeType.SELECT || attributeType.value === AttributeType.HIDDEN) {
+        @if (attributeType.value === 'SELECT' || attributeType.value === 'HIDDEN') {
             <div cdkDropList (cdkDropListDropped)="onDropped($event)">
                 <mat-label>属性选项</mat-label>
                 <div class="attribute-option-group-container" formArrayName="attributeOptions">
-                    @for (item of attributeOptions.controls;track index;let index = $index) {
-                        <div cdkDrag [formGroupName]="index" class="attribute-option-content">
+                    @for (group of attributeOptions.controls;track $index) {
+                        <div cdkDrag [formGroupName]="$index" class="attribute-option-content">
                             <mat-icon class="drag-box" fontIcon="drag_indicator"></mat-icon>
                             <input matNativeControl type="text" formControlName="name">
-                            @if (index !== 0) {
-                                <mat-icon fontIcon="delete"></mat-icon>
+                            @if (!$first) {
+                                <mat-icon fontIcon="delete" (click)="deleteAttributeOption($index)"></mat-icon>
                             }
-                            @if (index + 1 === attributeOptions.length) {
-                                <mat-icon (click)="addNewAttributeOption()" fontIcon="add_box">
+                            @if ($last) {
+                                <mat-icon (click)="addAttributeOption()" fontIcon="add_box">
                                 </mat-icon>
                             }
                         </div>
@@ -113,7 +113,7 @@
 
     <div mat-dialog-actions align="start">
         <button mat-raised-button type="button" [mat-dialog-close]="false">取消</button>
-        <button mat-raised-button type="submit" color="primary" [mat-dialog-close]="true">保存</button>
+        <button mat-raised-button type="submit" color="primary">保存</button>
         <!--@if (attributeId) {
             <button mat-raised-button type="submit" color="primary" [mat-dialog-close]="true">保存</button>
         } @else {

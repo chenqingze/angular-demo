@@ -22,21 +22,22 @@ export const errorInterceptor: HttpInterceptorFn = (req, next) => {
     return next(req).pipe(catchError((httpErrorResponse: HttpErrorResponse) => {
 
         const errorPages = [STATUS.FORBIDDEN, STATUS.NOT_FOUND, STATUS.INTERNAL_SERVER_ERROR];
-        let message = '';
-        if (httpErrorResponse.status === 0) {
+        let message = 'An unknown error occurred!';
+        if (httpErrorResponse.status === 0 || httpErrorResponse.error instanceof ErrorEvent) {
             // handle client-side or network error occurred Handle it accordingly.
             console.error('An client side error occurred:', httpErrorResponse.error);
-            message = `${httpErrorResponse.error.message}`;
+            message = `Client Side Error:${httpErrorResponse.error.message}`;
         } else {
             // handle server-side error
             // The backend returned an unsuccessful response code.
             // The response body may contain clues as to what went wrong.
             // console.error('ERROR===', httpErrorResponse);
-            console.error(`Backend returned code ${httpErrorResponse.status}, message ${httpErrorResponse.message} body was: `, httpErrorResponse.error);
+            // console.error(`Backend returned code ${httpErrorResponse.status}, message ${httpErrorResponse.message} body was: `, httpErrorResponse.error);
             if (errorPages.includes(httpErrorResponse.status)) {
                 router.navigateByUrl(`/${httpErrorResponse.status}`, {skipLocationChange: true});
             } else {
                 // console.error('ERROR', httpErrorResponse);
+                // message = `Backend returned code ${httpErrorResponse.status} , Message: ${httpErrorResponse.message},  Body was: ` + httpErrorResponse.error;
                 message = `Backend returned code ${httpErrorResponse.status} , Message: ${httpErrorResponse.message},  Body was: ` + httpErrorResponse.error;
                 if (httpErrorResponse.status === STATUS.UNAUTHORIZED) {
                     const requestUrl = req.url; // 获取请求的 URL

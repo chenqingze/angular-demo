@@ -28,7 +28,6 @@ import {MatInputModule} from '@angular/material/input';
     styleUrl: './product-specific-attribute.component.scss'
 })
 export class ProductSpecificAttributeComponent implements OnInit {
-    protected readonly AttributeType = AttributeType;
 
     productSpecificAttributeForm = this.fb.group({
         attributes: new UntypedFormArray([]),
@@ -40,7 +39,7 @@ export class ProductSpecificAttributeComponent implements OnInit {
 
     addAttribute(type: AttributeType) {
         switch (type) {
-            case AttributeType.SELECT:
+            case 'SELECT':
                 const attributeOption = this.fb.group({
                     name: this.fb.group('')
                 })
@@ -51,11 +50,11 @@ export class ProductSpecificAttributeComponent implements OnInit {
                 });
                 this.attributes.push(attribute);
                 break;
-            case AttributeType.TEXTAREA:
+            case 'TEXTAREA':
                 break;
-            case AttributeType.CHECKBOX:
+            case 'CHECKBOX':
                 break;
-            case AttributeType.HIDDEN:
+            case 'HIDDEN':
                 break;
 
         }

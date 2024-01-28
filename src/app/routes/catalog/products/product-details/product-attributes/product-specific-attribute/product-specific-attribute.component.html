@@ -6,9 +6,9 @@
                 <mat-icon fontIcon="arrow_drop_down"></mat-icon>
             </button>
             <mat-menu #menu="matMenu">
-                <button mat-menu-item (click)="addAttribute(AttributeType.SELECT)">普通文本</button>
-                <button mat-menu-item (click)="addAttribute(AttributeType.TEXTAREA)">文本区</button>
-                <button mat-menu-item (click)="addAttribute(AttributeType.CHECKBOX)">是/否</button>
+                <button mat-menu-item (click)="addAttribute('SELECT')">普通文本</button>
+                <button mat-menu-item (click)="addAttribute('TEXTAREA')">文本区</button>
+                <button mat-menu-item (click)="addAttribute('CHECKBOX')">是/否</button>
             </mat-menu>
         </div>
         <div class="content" formArrayName="attributes">
