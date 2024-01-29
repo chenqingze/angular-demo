@@ -3,7 +3,7 @@ import {Category} from '../shared/category';
 import {MatTable, MatTableDataSource, MatTableModule} from '@angular/material/table';
 import {MatIconModule} from '@angular/material/icon';
 import {MatButtonModule} from '@angular/material/button';
-import {ActivatedRoute, Router, RouterLink} from '@angular/router';
+import {RouterLink} from '@angular/router';
 import {CategoryService} from '../shared/category.service';
 import {MatInputModule} from '@angular/material/input';
 import {MatToolbarModule} from '@angular/material/toolbar';
@@ -41,7 +41,7 @@ export class CategoryListComponent implements OnInit {
     categoryDataSource: MatTableDataSource<Category> = new MatTableDataSource<Category>(this.allCategories);
 
 
-    constructor(private router: Router, private route: ActivatedRoute, private notificationService: NotificationService, private dialogService: DialogService, private categoryService: CategoryService) {
+    constructor(private notificationService: NotificationService, private dialogService: DialogService, private categoryService: CategoryService) {
     }
 
     ngOnInit(): void {

@@ -7,8 +7,7 @@ interface AttributeGroup {
     id?: string;
     name: string;
     displayOrder: number;
-    productClass?: ProductClass
-    attributes?: Attribute[]
+    productClassId?: string
 }
 
 interface ProductClass {

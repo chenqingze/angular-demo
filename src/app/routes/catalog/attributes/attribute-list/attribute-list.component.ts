@@ -10,6 +10,7 @@ import {AttributeDetailsDialogComponent} from '../attribute-details-dialog/attri
 import {AttributeService} from '../shared/attribute.service';
 import {CdkDrag, CdkDragDrop, CdkDropList, moveItemInArray} from '@angular/cdk/drag-drop';
 import {ActivatedRoute} from '@angular/router';
+import {AttributeGroupsDialogComponent} from '../attribute-groups-dialog/attribute-groups-dialog.component';
 
 @Component({
     selector: 'app-attribute-list',
@@ -38,11 +39,12 @@ export class AttributeListComponent implements OnInit {
     }
 
     ngOnInit(): void {
-        if (this.productClassId) {
-            this.attributeService.findAllProductClassAttributes(this.productClassId).subscribe(result => this.attributeDataSource.data = result);
-        } else {
-            this.attributeService.findAllGlobalAttributes().subscribe(result => this.attributeDataSource.data = result);
-        }
+        const $initRequest = this.productClassId ? this.attributeService.findAllProductClassAttributes(this.productClassId) : this.attributeService.findAllGlobalAttributes();
+        $initRequest.subscribe(result => this.attributeDataSource.data = result);
+    }
+
+    manageAttributeGroups() {
+        this.dialog.open(AttributeGroupsDialogComponent, {data: this.productClassId}).afterClosed().subscribe();
     }
 
     onDropped(event: CdkDragDrop<any, any>) {

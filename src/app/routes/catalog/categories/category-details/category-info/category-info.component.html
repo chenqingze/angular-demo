@@ -1,0 +1,44 @@
+<form [formGroup]="categoryDetailsFrom" (ngSubmit)="onSubmit()">
+    <mat-card>
+        <mat-card-content class="content">
+            <mat-form-field>
+                <mat-label>分类名称</mat-label>
+                <input matInput type="text" formControlName="name">
+            </mat-form-field>
+            <mat-form-field>
+                <mat-label>父分类</mat-label>
+                <!-- todo: select -->
+                <input matInput type="text" formControlName="parentId">
+            </mat-form-field>
+            <mat-form-field>
+                <mat-label>是否启用</mat-label>
+                <mat-select formControlName="enabled">
+                    <mat-option [value]="true">是</mat-option>
+                    <mat-option [value]="false">否</mat-option>
+                </mat-select>
+            </mat-form-field>
+            <mat-form-field>
+                <mat-label>分类图片</mat-label>
+                <image-input [multiple]="true"
+                             [maxCount]="1"
+                             [imageType]="'image/*'"
+                             formControlName="icon">
+                </image-input>
+            </mat-form-field>
+            <label for="description">描述</label>
+            <ngx-wig id="description" formControlName="description"></ngx-wig>
+
+        </mat-card-content>
+    </mat-card>
+    <page-footer>
+        <ng-container buttons>
+            <!--<button mat-raised-button type="button">取消</button>-->
+            <button mat-raised-button type="submit"
+                    [disabled]="categoryDetailsFrom.invalid||categoryDetailsFrom.pristine">保存
+            </button>
+            <button mat-raised-button type="button"
+                    [disabled]="categoryDetailsFrom.invalid||categoryDetailsFrom.pristine">删除
+            </button>
+        </ng-container>
+    </page-footer>
+</form>

@@ -92,11 +92,11 @@
             <div cdkDropList (cdkDropListDropped)="onDropped($event)">
                 <mat-label>属性选项</mat-label>
                 <div class="attribute-option-group-container" formArrayName="attributeOptions">
-                    @for (group of attributeOptions.controls;track $index) {
-                        <div cdkDrag [formGroupName]="$index" class="attribute-option-content">
+                    @for (group of attributeOptions.controls;track $index;) {
+                        <div cdkDrag class="attribute-option-content" [formGroupName]="$index">
                             <mat-icon class="drag-box" fontIcon="drag_indicator"></mat-icon>
-                            <input matNativeControl type="text" formControlName="name">
-                            @if (!$first) {
+                            <input matNativeControl autofocus type="text" formControlName="name">
+                            @if ($count > 1) {
                                 <mat-icon fontIcon="delete" (click)="deleteAttributeOption($index)"></mat-icon>
                             }
                             @if ($last) {

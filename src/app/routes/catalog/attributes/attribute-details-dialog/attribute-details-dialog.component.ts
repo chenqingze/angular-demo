@@ -102,17 +102,6 @@ export class AttributeDetailsDialogComponent implements OnInit {
         this.attributeOptions.push(this.newAttributeOption(displayOrder));
     }
 
-    deleteAttributeOption(idx: number) {
-        this.attributeOptions.removeAt(idx);
-    }
-
-    onDropped(event: CdkDragDrop<any [], any>) {
-        const {previousIndex, currentIndex} = event;
-        moveItemInArray(this.attributeOptions.value, previousIndex, currentIndex);
-        this.attributeOptions.value.forEach((item, index) => item.displayOrder = index);
-        this.attributeOptions.patchValue([...this.attributeOptions.value]);
-    }
-
     ngOnInit(): void {
         const {productClassId, attributeId} = this.data;
         if (productClassId) {
@@ -134,6 +123,18 @@ export class AttributeDetailsDialogComponent implements OnInit {
             this.addAttributeOption();
         }
     }
+
+    deleteAttributeOption(idx: number) {
+        this.attributeOptions.removeAt(idx);
+    }
+
+    onDropped(event: CdkDragDrop<any [], any>) {
+        const {previousIndex, currentIndex} = event;
+        moveItemInArray(this.attributeOptions.value, previousIndex, currentIndex);
+        this.attributeOptions.value.forEach((item, index) => item.displayOrder = index);
+        this.attributeOptions.patchValue([...this.attributeOptions.value]);
+    }
+
 
     onSubmit() {
         if (this.attributeForm.controls.id.value) {
