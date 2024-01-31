@@ -13,10 +13,17 @@ import {MatIconModule} from '@angular/material/icon';
 import {MatInputModule} from '@angular/material/input';
 import {MatSelectModule} from '@angular/material/select';
 import {FormControl, FormGroup, NonNullableFormBuilder, ReactiveFormsModule} from '@angular/forms';
-import {AttributeDisplayMode, AttributeDisplayModes, AttributeType, AttributeTypes,} from '../shared/attribute';
+import {
+    AttributeDisplayMode,
+    AttributeDisplayModes,
+    AttributeGroup,
+    AttributeType,
+    AttributeTypes,
+} from '../shared/attribute';
 import {takeUntilDestroyed} from '@angular/core/rxjs-interop';
 import {CdkDrag, CdkDragDrop, CdkDropList, moveItemInArray} from '@angular/cdk/drag-drop';
 import {AttributeService} from '../shared/attribute.service';
+import {AttributeGroupService} from '../shared/attribute-group.service';
 
 @Component({
     selector: 'app-attribute-details-dialog',
@@ -41,6 +48,7 @@ import {AttributeService} from '../shared/attribute.service';
 export class AttributeDetailsDialogComponent implements OnInit {
     protected readonly AttributeTypes = AttributeTypes;
     protected readonly AttributeDisplayModes = AttributeDisplayModes;
+    attributeGroups: AttributeGroup[] = [];
     attributeForm = this.fb.group({
         id: this.fb.control<string | undefined>(undefined),
         name: this.fb.control(''),
@@ -69,7 +77,7 @@ export class AttributeDetailsDialogComponent implements OnInit {
     constructor(@Inject(MAT_DIALOG_DATA) public data: {
         productClassId?: string,
         attributeId?: string
-    }, private dialogRef: MatDialogRef<AttributeDetailsDialogComponent, boolean>, private fb: NonNullableFormBuilder, private attributeService: AttributeService) {
+    }, private dialogRef: MatDialogRef<AttributeDetailsDialogComponent, boolean>, private fb: NonNullableFormBuilder, private attributeService: AttributeService, private attributeGroupService: AttributeGroupService) {
 
         this.attributeType.valueChanges
             .pipe(takeUntilDestroyed())
@@ -89,24 +97,10 @@ export class AttributeDetailsDialogComponent implements OnInit {
             });
     }
 
-    newAttributeOption(displayOrder = 0) {
-        return this.fb.group({
-            id: this.fb.control<string | undefined>(undefined),
-            name: this.fb.control(''),
-            displayOrder: this.fb.control(displayOrder)
-        });
-    }
-
-    addAttributeOption() {
-        const displayOrder = this.attributeOptions.length ?? 0;
-        this.attributeOptions.push(this.newAttributeOption(displayOrder));
-    }
-
     ngOnInit(): void {
         const {productClassId, attributeId} = this.data;
-        if (productClassId) {
-            this.attributeForm.controls.productClassId.setValue(productClassId);
-        }
+        productClassId && this.attributeForm.controls.productClassId.setValue(productClassId);
+        this.attributeGroupService.findAllAttributeGroups(productClassId).subscribe(result => this.attributeGroups = result);
         if (attributeId) {
             this.attributeService.getAttribute(attributeId).subscribe(result => {
                 const attributeOptionSize = result.attributeOptions?.length;
@@ -122,6 +116,19 @@ export class AttributeDetailsDialogComponent implements OnInit {
         } else {
             this.addAttributeOption();
         }
+    }
+
+    newAttributeOption(displayOrder = 0) {
+        return this.fb.group({
+            id: this.fb.control<string | undefined>(undefined),
+            name: this.fb.control(''),
+            displayOrder: this.fb.control(displayOrder)
+        });
+    }
+
+    addAttributeOption() {
+        const displayOrder = this.attributeOptions.length ?? 0;
+        this.attributeOptions.push(this.newAttributeOption(displayOrder));
     }
 
     deleteAttributeOption(idx: number) {

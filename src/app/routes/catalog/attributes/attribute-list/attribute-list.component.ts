@@ -1,9 +1,9 @@
 import {Component, Input, OnInit, ViewChild} from '@angular/core';
 import {MatButtonModule} from '@angular/material/button';
 import {MatIconModule} from '@angular/material/icon';
-import {MatTable, MatTableDataSource, MatTableModule} from '@angular/material/table';
+import {MatTable, MatTableModule} from '@angular/material/table';
 import {ReactiveFormsModule} from '@angular/forms';
-import {Attribute} from '../shared/attribute';
+import {Attribute, AttributeGroup} from '../shared/attribute';
 import {MatSlideToggleModule} from '@angular/material/slide-toggle';
 import {MatDialog} from '@angular/material/dialog';
 import {AttributeDetailsDialogComponent} from '../attribute-details-dialog/attribute-details-dialog.component';
@@ -11,6 +11,9 @@ import {AttributeService} from '../shared/attribute.service';
 import {CdkDrag, CdkDragDrop, CdkDropList, moveItemInArray} from '@angular/cdk/drag-drop';
 import {ActivatedRoute} from '@angular/router';
 import {AttributeGroupsDialogComponent} from '../attribute-groups-dialog/attribute-groups-dialog.component';
+import {AttributeGroupService} from '../shared/attribute-group.service';
+import {forkJoin} from 'rxjs';
+import {NgStyle} from '@angular/common';
 
 @Component({
     selector: 'app-attribute-list',
@@ -22,7 +25,8 @@ import {AttributeGroupsDialogComponent} from '../attribute-groups-dialog/attribu
         ReactiveFormsModule,
         MatSlideToggleModule,
         CdkDropList,
-        CdkDrag
+        CdkDrag,
+        NgStyle
     ],
     templateUrl: './attribute-list.component.html',
     styleUrl: './attribute-list.component.scss'
@@ -31,16 +35,31 @@ export class AttributeListComponent implements OnInit {
 
     @Input() productClassId?: string;
     @ViewChild(MatTable) table!: MatTable<Attribute>;
-    attributeDataSource: MatTableDataSource<Attribute> = new MatTableDataSource<Attribute>([]);
+    // attributeDataSource: MatTableDataSource<Attribute> = new MatTableDataSource<Attribute>([]);
     displayedColumns: string[] = ['dragBox', 'name', 'attributeType', 'isVisible', 'attributeDisplayMode', 'operate'];
+    attributeGroups: AttributeGroup [] = [];
 
-    constructor(private route: ActivatedRoute, private dialog: MatDialog, private attributeService: AttributeService) {
-
+    constructor(private route: ActivatedRoute, private dialog: MatDialog, private attributeService: AttributeService, private attributeGroupService: AttributeGroupService) {
     }
 
     ngOnInit(): void {
-        const $initRequest = this.productClassId ? this.attributeService.findAllProductClassAttributes(this.productClassId) : this.attributeService.findAllGlobalAttributes();
-        $initRequest.subscribe(result => this.attributeDataSource.data = result);
+        forkJoin([
+            this.attributeGroupService.findAllAttributeGroups(this.productClassId),
+            this.attributeService.findAttributes(this.productClassId)]
+        ).subscribe(([attributeGroups, attributes]) => {
+            const nonGroup: AttributeGroup = {
+                id: undefined, name: '未分组', displayOrder: 0,
+                productClassId: this.productClassId
+            }
+            this.attributeGroups = [nonGroup, ...attributeGroups].map(group => {
+                const attributeGroup = {...group};
+                const groupId = attributeGroup.id;
+                attributeGroup.attributes = attributes.filter(attribute => attribute.attributeGroupId == groupId);
+                return attributeGroup;
+            });
+        });
+
+
     }
 
     manageAttributeGroups() {

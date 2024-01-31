@@ -8,6 +8,7 @@ interface AttributeGroup {
     name: string;
     displayOrder: number;
     productClassId?: string
+    attributes?: Attribute [];
 }
 
 interface ProductClass {

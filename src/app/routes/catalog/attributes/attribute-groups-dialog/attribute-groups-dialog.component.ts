@@ -53,8 +53,7 @@ export class AttributeGroupsDialogComponent implements OnInit {
     }
 
     ngOnInit(): void {
-        const $initRequest = this.productClassId ? this.attributeGroupService.findAllProductClassAttributeGroups(this.productClassId) : this.attributeGroupService.findAllGlobalAttributeGroups();
-        $initRequest.subscribe(result => {
+        this.attributeGroupService.findAllAttributeGroups(this.productClassId).subscribe(result => {
             this.allAttributeGroups = result;
             this.attributeGroups = result;
             this.newAttributeGroups = [];

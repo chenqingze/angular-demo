@@ -2,7 +2,6 @@ import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {Observable} from 'rxjs';
 import {Attribute} from './attribute';
-import {Page} from '../../../../shared/models/page';
 
 @Injectable({
     providedIn: 'root'
@@ -30,15 +29,18 @@ export class AttributeService {
         return this.httpClient.get<Attribute>(`${this.PATH}/${id}`);
     }
 
-    findGlobalAttributes(): Observable<Page<Attribute>> {
-        return this.httpClient.get<Page<Attribute>>(`${this.PATH}`);
+    findAttributes(productClassId?: string): Observable<Attribute[]> {
+        if (productClassId) {
+            return this.findAllProductClassAttributes(productClassId);
+        }
+        return this.findAllGlobalAttributes();
     }
 
-    findAllGlobalAttributes(): Observable<Attribute[]> {
+    private findAllGlobalAttributes(): Observable<Attribute[]> {
         return this.httpClient.get<Attribute[]>(`${this.PATH}`);
     }
 
-    findAllProductClassAttributes(productClassId: string): Observable<Attribute[]> {
+    private findAllProductClassAttributes(productClassId: string): Observable<Attribute[]> {
         return this.httpClient.get<Attribute[]>(`/catalog/product-classes/${productClassId}/attributes`);
     }
 

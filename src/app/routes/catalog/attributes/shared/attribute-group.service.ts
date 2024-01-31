@@ -2,7 +2,6 @@ import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {Observable} from 'rxjs';
 import {AttributeGroup} from './attribute';
-import {Page} from '../../../../shared/models/page';
 
 @Injectable({
     providedIn: 'root'
@@ -30,15 +29,19 @@ export class AttributeGroupService {
         return this.httpClient.get<AttributeGroup>(`${this.PATH}/${id}`);
     }
 
-    findAttributeGroups(): Observable<Page<AttributeGroup>> {
-        return this.httpClient.get<Page<AttributeGroup>>(`${this.PATH}`);
+    findAllAttributeGroups(productClassId?: string): Observable<AttributeGroup []> {
+        if (productClassId) {
+            return this.findAllProductClassAttributeGroups(productClassId);
+        }
+        return this.findAllGlobalAttributeGroups();
     }
 
-    findAllGlobalAttributeGroups(): Observable<AttributeGroup[]> {
+
+    private findAllGlobalAttributeGroups(): Observable<AttributeGroup[]> {
         return this.httpClient.get<AttributeGroup[]>(`${this.PATH}`);
     }
 
-    findAllProductClassAttributeGroups(productClassId: string): Observable<AttributeGroup[]> {
+    private findAllProductClassAttributeGroups(productClassId: string): Observable<AttributeGroup[]> {
         return this.httpClient.get<AttributeGroup[]>(`/catalog/product-classes/${productClassId}/attribute-groups`);
     }
 

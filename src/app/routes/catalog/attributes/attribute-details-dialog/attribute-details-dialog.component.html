@@ -18,6 +18,9 @@
             <mat-label>分组</mat-label>
             <mat-select placeholder="未分组" formControlName="attributeGroupId">
                 <mat-option [value]="null">未分组</mat-option>
+                @for (attributeGroup of attributeGroups;track $index) {
+                    <mat-option [value]="attributeGroup.id">{{ attributeGroup.name }}</mat-option>
+                }
             </mat-select>
         </mat-form-field>
 
