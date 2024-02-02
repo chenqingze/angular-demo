@@ -54,15 +54,14 @@ export class AttributeDetailsDialogComponent implements OnInit {
         name: this.fb.control(''),
         displayOrder: this.fb.control(0),
         attributeType: this.fb.control<AttributeType>('SELECT'),
-        attributeDisplayMode: this.fb.control<AttributeDisplayMode>('SELECT_BOX'),
-        isVisible: this.fb.control<boolean | undefined>(false),
+        attributeDisplayMode: this.fb.control<AttributeDisplayMode | undefined>(undefined),
         attributeGroupId: this.fb.control<string | undefined>(undefined),
         productClassId: this.fb.control<string | undefined>(undefined),
         productId: this.fb.control<string | undefined>(undefined),
         attributeOptions: this.fb.array<FormGroup<{
+            id: FormControl<string | undefined>
             name: FormControl<string>;
             displayOrder: FormControl<number>;
-            id: FormControl<string | undefined>
         }>>([]),
     });
 
@@ -86,11 +85,6 @@ export class AttributeDetailsDialogComponent implements OnInit {
                 if (type === 'SELECT' || type === 'HIDDEN') {
                     this.attributeOptions.clear();
                     this.addAttributeOption();
-                    if (type === 'HIDDEN') {
-                        this.attributeForm.controls.isVisible.setValue(undefined);
-                    } else {
-                        this.attributeForm.controls.isVisible.setValue(false);
-                    }
                 } else {
                     this.attributeOptions.clear();
                 }

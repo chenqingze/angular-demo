@@ -36,7 +36,7 @@ export class AttributeListComponent implements OnInit {
     @Input() productClassId?: string;
     @ViewChild(MatTable) table!: MatTable<Attribute>;
     // attributeDataSource: MatTableDataSource<Attribute> = new MatTableDataSource<Attribute>([]);
-    displayedColumns: string[] = ['dragBox', 'name', 'attributeType', 'isVisible', 'attributeDisplayMode', 'operate'];
+    displayedColumns: string[] = ['dragBox', 'name', 'attributeType', 'attributeDisplayMode', 'operate'];
     attributeGroups: AttributeGroup [] = [];
 
     constructor(private route: ActivatedRoute, private dialog: MatDialog, private attributeService: AttributeService, private attributeGroupService: AttributeGroupService) {

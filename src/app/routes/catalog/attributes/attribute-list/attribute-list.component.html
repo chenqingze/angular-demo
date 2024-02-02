@@ -41,14 +41,6 @@
                 <td mat-cell *matCellDef="let element">{{ element.attributeType }}</td>
             </ng-container>
 
-            <!-- productCount Column -->
-            <ng-container matColumnDef="isVisible">
-                <th mat-header-cell *matHeaderCellDef>是否作为产品选项</th>
-                <td mat-cell *matCellDef="let element">
-                    <mat-slide-toggle [id]="element.id" checked="{{element.isVisible}}"></mat-slide-toggle>
-                </td>
-            </ng-container>
-
             <!-- enabled Column -->
             <ng-container matColumnDef="attributeDisplayMode">
                 <th mat-header-cell *matHeaderCellDef>作为产品选项显示类型</th>

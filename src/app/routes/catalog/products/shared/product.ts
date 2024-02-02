@@ -1,13 +1,24 @@
 import {ProductClass} from '../../attributes/shared/attribute';
 import {Image} from '../../../../shared/models/file';
 import {Brand} from '../../brands/shared/brand';
+import {
+    AttributeValueCheckbox,
+    AttributeValueHidden,
+    AttributeValueSelect,
+    AttributeValueText
+} from '../product-details/product-attributes/shared/attribute-value';
 
-export type AttributeType = string | 'SELECT' | 'TEXTAREA' | 'CHECKBOX' | 'HIDDEN'
-export type AttributeDisplayMode = string | 'BLOCKS' | 'SELECT_BOX'
-export type DiscountType = string | 'ABSOLUTE' | 'PERCENTAGE'
+interface Dimension {
+    depth?: string
 
+    width?: string
 
-export interface Product {
+    height?: string
+
+    dimensionalUnits?: string
+}
+
+interface Product {
     id?: string;
     externalId?: string;
     name: string;
@@ -21,7 +32,6 @@ export interface Product {
     costPrice?: string;
     enabled?: boolean;
     // isOnSale?: boolean
-    discountType?: DiscountType;
     discountValue?: string;
     minThreshold?: number;
     maxThreshold?: number;
@@ -37,26 +47,19 @@ export interface Product {
     brand?: Brand;
     categoryIds?: string [];
     productClass?: ProductClass;
-    attributeValues?: AttributeValue[];
+    attributeValueSelects?: AttributeValueSelect[];
+    attributeValueCheckboxes?: AttributeValueCheckbox[];
+    attributeValueTexts?: AttributeValueText[];
+    attributeValueHiddens?: AttributeValueHidden[];
 }
 
-export interface Dimension {
-    depth?: string
+export {
+    Dimension,
+    Product
+};
 
-    width?: string
 
-    height?: string
 
-    dimensionalUnits?: string
-}
-
-export interface AttributeValue {
-    id?: number
-
-    product?: any
-
-    attribute?: any
-}
 
 
 

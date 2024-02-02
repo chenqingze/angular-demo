@@ -9,5 +9,16 @@
     justify-content: space-between;
     align-items: center;
   }
+
+  .content {
+    .hide {
+      display: none;
+    }
+
+    .attribute-option:hover .hide {
+      display: inline-block;
+    }
+  }
+
 }
 

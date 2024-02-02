@@ -46,50 +46,6 @@
             </mat-form-field>
         }
 
-        <!-- isVisible -->
-        @if (attributeType.value !== 'HIDDEN') {
-            <mat-form-field>
-                <mat-label>是否作为产品选项显示</mat-label>
-                <mat-select formControlName="isVisible">
-                    <mat-option [value]="true">是</mat-option>
-                    <mat-option [value]="false">否</mat-option>
-                </mat-select>
-            </mat-form-field>
-        }
-
-        <!-- canBuyerSelect -->
-        <!-- @if (attributeType.value === AttributeType.BOOLEAN) {
-             <mat-form-field>
-                 <mat-label>卖家是否可选择属性值</mat-label>
-                 <mat-select formControlName="canBuyerSelect">
-                     <mat-option [value]="true">是</mat-option>
-                     <mat-option [value]="false">否</mat-option>
-                 </mat-select>
-             </mat-form-field>
-         }-->
-
-        <!-- isDefaultValue -->
-        <!--@if (attributeType.value === AttributeType.BOOLEAN) {
-            <mat-form-field>
-                <mat-label>默认值</mat-label>
-                <mat-select formControlName="isDefault">
-                    <mat-option [value]="true">是</mat-option>
-                    <mat-option [value]="false">否</mat-option>
-                </mat-select>
-            </mat-form-field>
-        }-->
-
-        <!-- editable -->
-        <!-- @if (attributeType.value === AttributeType.TEXTAREA) {
-             <mat-form-field>
-                 <mat-label>默认值</mat-label>
-                 <mat-select formControlName="editable">
-                     <mat-option [value]="true">是</mat-option>
-                     <mat-option [value]="false">否</mat-option>
-                 </mat-select>
-             </mat-form-field>
-         }-->
-
         <!-- attributeOptions -->
         @if (attributeType.value === 'SELECT' || attributeType.value === 'HIDDEN') {
             <div cdkDropList (cdkDropListDropped)="onDropped($event)">
@@ -111,6 +67,39 @@
                 </div>
             </div>
         }
+
+        <!-- canBuyerSelect -->
+        <!-- @if (attributeType.value === '') {
+             <mat-form-field>
+                 <mat-label>卖家是否可选择属性值</mat-label>
+                 <mat-select formControlName="canBuyerSelect">
+                     <mat-option [value]="true">是</mat-option>
+                     <mat-option [value]="false">否</mat-option>
+                 </mat-select>
+             </mat-form-field>
+         }-->
+
+        <!-- isDefaultValue -->
+        <!--@if (attributeType.value === 'CHECKBOX') {
+            <mat-form-field>
+                <mat-label>默认值</mat-label>
+                <mat-select formControlName="isDefault">
+                    <mat-option [value]="true">是</mat-option>
+                    <mat-option [value]="false">否</mat-option>
+                </mat-select>
+            </mat-form-field>
+        }-->
+
+        <!-- editable -->
+        <!-- @if (attributeType.value === 'TEXT') {
+             <mat-form-field>
+                 <mat-label>默认值</mat-label>
+                 <mat-select formControlName="editable">
+                     <mat-option [value]="true">是</mat-option>
+                     <mat-option [value]="false">否</mat-option>
+                 </mat-select>
+             </mat-form-field>
+         }-->
 
     </div>
 

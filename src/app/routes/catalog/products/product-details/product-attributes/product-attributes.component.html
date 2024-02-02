@@ -6,7 +6,7 @@
 </mat-button-toggle-group>
 @switch (attributeGroup.value) {
     @case ('product-specific-attribute') {
-        <app-product-specific-attribute></app-product-specific-attribute>
+        <app-product-specific-attribute [productId]="productId"></app-product-specific-attribute>
     }
     @case ('product-class-attribute') {
         <app-product-class-attribute></app-product-class-attribute>

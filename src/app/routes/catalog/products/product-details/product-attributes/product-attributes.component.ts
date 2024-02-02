@@ -1,4 +1,4 @@
-import {Component} from '@angular/core';
+import {Component, Input} from '@angular/core';
 import {MatButtonToggleModule} from '@angular/material/button-toggle';
 import {ProductSpecificAttributeComponent} from './product-specific-attribute/product-specific-attribute.component';
 import {ProductClassAttributeComponent} from './product-class-attribute/product-class-attribute.component';
@@ -19,5 +19,5 @@ import {HiddenAttributeComponent} from './hidden-attribute/hidden-attribute.comp
     styleUrl: './product-attributes.component.scss'
 })
 export class ProductAttributesComponent {
-
+    @Input({required: true}) productId!: string;
 }
