@@ -46,10 +46,10 @@ import {Product} from '../shared/product';
         PageFooterComponent,
         ReactiveFormsModule
     ],
-    templateUrl: './add-edit-product.component.html',
-    styleUrl: './add-edit-product.component.scss'
+    templateUrl: './product-info.component.html',
+    styleUrl: './product-info.component.scss'
 })
-export class AddEditProductComponent implements OnInit {
+export class ProductInfoComponent implements OnInit {
     @Input() productId: string | undefined;
     separatorKeysCodes: number[] = [ENTER, COMMA];
     filteredCategories!: Observable<Category []>;

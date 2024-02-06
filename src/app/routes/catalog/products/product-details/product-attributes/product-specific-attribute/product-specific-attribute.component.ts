@@ -13,23 +13,35 @@ import {MatIconModule} from '@angular/material/icon';
 import {MatTableModule} from '@angular/material/table';
 import {PageFooterComponent} from '../../../../../../shared/components/page-footer/page-footer.component';
 import {MatMenuModule} from '@angular/material/menu';
-import {AttributeDisplayMode, AttributeType} from '../../../../attributes/shared/attribute';
+import {AddToNewType, Attribute, AttributeDisplayMode, AttributeType} from '../../../../attributes/shared/attribute';
 import {MatInputModule} from '@angular/material/input';
+import {MatCheckboxModule} from '@angular/material/checkbox';
+import {NgClass} from '@angular/common';
+import {MatSelectModule} from '@angular/material/select';
+import {Product} from '../../../shared/product';
 
 interface AttributeOptionForm {
     id: FormControl<string | undefined>,
     name: FormControl<string>,
-    displayOrder: FormControl<number>
+    displayOrder: FormControl<number>,
+    addToNew: FormControl<boolean>
 }
 
 interface AttributeForm {
-    id?: FormControl<string | undefined>,
+    id: FormControl<string | undefined>,
     name: FormControl<string>,
     displayOrder: FormControl<number>
     attributeType: FormControl<AttributeType>;
     attributeDisplayMode: FormControl<AttributeDisplayMode | undefined>;
+    addToNew: FormControl<AddToNewType | undefined>;
     productId: FormControl<string>;
-    attributeOptions: FormArray<FormGroup<AttributeOptionForm>>;
+    attributeOptions?: FormArray<FormGroup<AttributeOptionForm>>;
+}
+
+interface AttributeValueForm {
+    id?: string;
+    attribute: Attribute;
+    product?: Product;
 }
 
 @Component({
@@ -45,13 +57,20 @@ interface AttributeForm {
         PageFooterComponent,
         ReactiveFormsModule,
         MatMenuModule,
-        MatInputModule
+        MatInputModule,
+        MatCheckboxModule,
+        NgClass,
+        MatSelectModule
     ],
     templateUrl: './product-specific-attribute.component.html',
     styleUrl: './product-specific-attribute.component.scss'
 })
 export class ProductSpecificAttributeComponent implements OnInit {
     @Input({required: true}) productId!: string;
+    attributeValueSelects = [];
+    attributeValueCheckboxes = [];
+    attributeValueTexts = [];
+    attributeValueHiddens = [];
     productSpecificAttributeForm = this.fb.group({
         attributes: this.fb.array<FormGroup<AttributeForm>>([]),
     })
@@ -64,7 +83,10 @@ export class ProductSpecificAttributeComponent implements OnInit {
     }
 
     ngOnInit(): void {
-
+        // this.attributeValueSelects
+        // this.attributeValueCheckboxes
+        // this.attributeValueTexts
+        // this.attributeValueHiddens
     }
 
     addAttribute(type: AttributeType) {
@@ -72,33 +94,45 @@ export class ProductSpecificAttributeComponent implements OnInit {
             id: this.fb.control<string | undefined>(undefined),
             name: this.fb.control(''),
             displayOrder: this.fb.control(0),
-            attributeType: this.fb.control<AttributeType>('SELECT'),
+            attributeType: this.fb.control<AttributeType>(type),
             attributeDisplayMode: this.fb.control<AttributeDisplayMode | undefined>(undefined),
+            addToNew: this.fb.control(undefined),
             productId: this.fb.control(this.productId),
-            attributeOptions: this.fb.array<FormGroup<AttributeOptionForm>>([]),
         });
-        switch (type) {
+        switch (attribute.controls.attributeType.value) {
             case 'SELECT':
-                const attributeOption: FormGroup<AttributeOptionForm> = this.fb.group({
-                    id: this.fb.control<string | undefined>(undefined),
-                    name: this.fb.control<string>(''),
-                    displayOrder: this.fb.control<number>(0),
-                })
-                attribute.controls.attributeDisplayMode.setValue('BLOCKS');
-                attribute.controls.attributeOptions.push(attributeOption);
+                this.addAttributeOption(attribute);
                 break;
             case 'TEXT':
+                break;
             case 'CHECKBOX':
             case 'HIDDEN':
             default:
                 break;
         }
         this.attributes.push(attribute);
-        console.log(this.attributes.value);
     }
 
-    addAttributeOption() {
+    deleteAttribute(attributeIdx: number) {
+        this.attributes.removeAt(attributeIdx);
+    }
 
+    addAttributeOption(attribute: FormGroup<AttributeForm>) {
+        const attributeOption: FormGroup<AttributeOptionForm> = this.fb.group({
+            id: this.fb.control<string | undefined>(undefined),
+            name: this.fb.control<string>(''),
+            displayOrder: this.fb.control<number>(0),
+            addToNew: this.fb.control(false)
+        })
+        attribute.controls.attributeDisplayMode.setValue('BLOCKS');
+        if (!attribute.controls.attributeOptions) {
+            attribute.addControl('attributeOptions', this.fb.array<FormGroup<AttributeOptionForm>>([]))
+        }
+        attribute.controls.attributeOptions?.push(attributeOption);
+    }
+
+    deleteAttributeOption(attributeIdx: number, attributeOptionIdx: number) {
+        this.attributes.at(attributeIdx).controls.attributeOptions?.removeAt(attributeOptionIdx);
     }
 
     onSubmit() {

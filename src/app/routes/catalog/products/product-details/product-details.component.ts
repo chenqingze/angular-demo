@@ -20,7 +20,7 @@ import {AsyncPipe} from '@angular/common';
 import {NumericDirective} from '../../../../shared/directives/numeric.directive';
 import {CategoryListComponent} from '../../categories/category-list/category-list.component';
 import {MatTabsModule} from '@angular/material/tabs';
-import {AddEditProductComponent} from '../add-edit-product/add-edit-product.component';
+import {ProductInfoComponent} from '../product-info/product-info.component';
 import {ProductAttributesComponent} from './product-attributes/product-attributes.component';
 
 @Component({
@@ -52,7 +52,7 @@ import {ProductAttributesComponent} from './product-attributes/product-attribute
         NumericDirective,
         CategoryListComponent,
         MatTabsModule,
-        AddEditProductComponent,
+        ProductInfoComponent,
         ProductAttributesComponent,
     ],
     templateUrl: './product-details.component.html',

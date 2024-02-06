@@ -12,7 +12,7 @@ import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatIconModule} from '@angular/material/icon';
 import {MatInputModule} from '@angular/material/input';
 import {MatSelectModule} from '@angular/material/select';
-import {FormControl, FormGroup, NonNullableFormBuilder, ReactiveFormsModule} from '@angular/forms';
+import {FormArray, FormControl, FormGroup, NonNullableFormBuilder, ReactiveFormsModule} from '@angular/forms';
 import {
     AttributeDisplayMode,
     AttributeDisplayModes,
@@ -24,6 +24,26 @@ import {takeUntilDestroyed} from '@angular/core/rxjs-interop';
 import {CdkDrag, CdkDragDrop, CdkDropList, moveItemInArray} from '@angular/cdk/drag-drop';
 import {AttributeService} from '../shared/attribute.service';
 import {AttributeGroupService} from '../shared/attribute-group.service';
+
+interface AttributeOptionForm {
+    id: FormControl<string | undefined>,
+    name: FormControl<string>,
+    displayOrder: FormControl<number>,
+    addToNew: FormControl<boolean>
+}
+
+interface AttributeForm {
+    id: FormControl<string | undefined>,
+    name: FormControl<string>,
+    displayOrder: FormControl<number>
+    attributeType: FormControl<AttributeType>;
+    attributeDisplayMode: FormControl<AttributeDisplayMode | undefined>;
+    // addToNew: FormControl<AddToNewType | undefined>;
+    attributeGroupId: FormControl<string | undefined>;
+    productClassId: FormControl<string | undefined>;
+    productId: FormControl<string | undefined>;
+    attributeOptions: FormArray<FormGroup<AttributeOptionForm>>;
+}
 
 @Component({
     selector: 'app-attribute-details-dialog',
@@ -49,20 +69,17 @@ export class AttributeDetailsDialogComponent implements OnInit {
     protected readonly AttributeTypes = AttributeTypes;
     protected readonly AttributeDisplayModes = AttributeDisplayModes;
     attributeGroups: AttributeGroup[] = [];
-    attributeForm = this.fb.group({
+    attributeForm: FormGroup<AttributeForm> = this.fb.group<AttributeForm>({
         id: this.fb.control<string | undefined>(undefined),
         name: this.fb.control(''),
         displayOrder: this.fb.control(0),
         attributeType: this.fb.control<AttributeType>('SELECT'),
         attributeDisplayMode: this.fb.control<AttributeDisplayMode | undefined>(undefined),
+        // addToNew: this.fb.control<AddToNewType | undefined>(undefined),
         attributeGroupId: this.fb.control<string | undefined>(undefined),
         productClassId: this.fb.control<string | undefined>(undefined),
         productId: this.fb.control<string | undefined>(undefined),
-        attributeOptions: this.fb.array<FormGroup<{
-            id: FormControl<string | undefined>
-            name: FormControl<string>;
-            displayOrder: FormControl<number>;
-        }>>([]),
+        attributeOptions: this.fb.array<FormGroup<AttributeOptionForm>>([]),
     });
 
     get attributeType() {
@@ -81,12 +98,17 @@ export class AttributeDetailsDialogComponent implements OnInit {
         this.attributeType.valueChanges
             .pipe(takeUntilDestroyed())
             .subscribe(type => {
-                // AttributeType.SELECT 和AttributeOptionType.HIDDEN 类型的属性 有多个属性选项
-                if (type === 'SELECT' || type === 'HIDDEN') {
-                    this.attributeOptions.clear();
-                    this.addAttributeOption();
-                } else {
-                    this.attributeOptions.clear();
+                switch (type) {
+                    case "SELECT":
+                    case "HIDDEN":
+                        this.attributeOptions.clear();
+                        this.addAttributeOption();
+                        break;
+                    case "CHECKBOX":
+                    case "TEXT":
+                    default:
+                        this.attributeOptions.clear();
+
                 }
             });
     }
@@ -116,7 +138,8 @@ export class AttributeDetailsDialogComponent implements OnInit {
         return this.fb.group({
             id: this.fb.control<string | undefined>(undefined),
             name: this.fb.control(''),
-            displayOrder: this.fb.control(displayOrder)
+            displayOrder: this.fb.control(displayOrder),
+            addToNew: this.fb.control(false)
         });
     }
 

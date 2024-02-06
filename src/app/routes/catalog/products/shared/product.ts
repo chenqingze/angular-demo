@@ -1,12 +1,12 @@
-import {ProductClass} from '../../attributes/shared/attribute';
-import {Image} from '../../../../shared/models/file';
-import {Brand} from '../../brands/shared/brand';
 import {
     AttributeValueCheckbox,
     AttributeValueHidden,
     AttributeValueSelect,
-    AttributeValueText
-} from '../product-details/product-attributes/shared/attribute-value';
+    AttributeValueText,
+    ProductClass
+} from '../../attributes/shared/attribute';
+import {Image} from '../../../../shared/models/file';
+import {Brand} from '../../brands/shared/brand';
 
 interface Dimension {
     depth?: string
