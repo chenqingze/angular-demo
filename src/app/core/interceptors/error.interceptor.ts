@@ -38,7 +38,14 @@ export const errorInterceptor: HttpInterceptorFn = (req, next) => {
             } else {
                 // console.error('ERROR', httpErrorResponse);
                 // message = `Backend returned code ${httpErrorResponse.status} , Message: ${httpErrorResponse.message},  Body was: ` + httpErrorResponse.error;
-                message = `Backend returned code ${httpErrorResponse.status} , Message: ${httpErrorResponse.message},  Body was: ` + httpErrorResponse.error;
+                let errorBody;
+                try {
+                    errorBody = JSON.stringify(httpErrorResponse.error);
+                } catch (e) {
+                    errorBody = httpErrorResponse.error;
+                }
+
+                message = `Backend returned code ${httpErrorResponse.status} , Message: ${httpErrorResponse.message},  Body was:  ${errorBody}`;
                 if (httpErrorResponse.status === STATUS.UNAUTHORIZED) {
                     const requestUrl = req.url; // 获取请求的 URL
                     console.log('Request URL:', requestUrl);

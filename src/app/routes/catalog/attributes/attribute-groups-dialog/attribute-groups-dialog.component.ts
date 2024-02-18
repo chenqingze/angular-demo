@@ -49,11 +49,11 @@ export class AttributeGroupsDialogComponent implements OnInit {
     attributeGroups: AttributeGroup[] = [];
     newAttributeGroups: AttributeGroup[] = [];
 
-    constructor(@Inject(MAT_DIALOG_DATA) public productClassId: string, private dialogRef: MatDialogRef<AttributeGroupsDialogComponent, boolean>, private notificationService: NotificationService, private attributeGroupService: AttributeGroupService) {
+    constructor(@Inject(MAT_DIALOG_DATA) public categoryId: string, private dialogRef: MatDialogRef<AttributeGroupsDialogComponent, boolean>, private notificationService: NotificationService, private attributeGroupService: AttributeGroupService) {
     }
 
     ngOnInit(): void {
-        this.attributeGroupService.findAllAttributeGroups(this.productClassId).subscribe(result => {
+        this.attributeGroupService.findAllAttributeGroups(this.categoryId).subscribe(result => {
             this.allAttributeGroups = result;
             this.attributeGroups = result;
             this.newAttributeGroups = [];
@@ -65,7 +65,7 @@ export class AttributeGroupsDialogComponent implements OnInit {
             id: '',
             name: '',
             displayOrder: 0,
-            productClassId: this.productClassId,
+            categoryId: this.categoryId,
         }
         this.newAttributeGroups.push(newAttributeGroup);
         this.attributeGroups = this.allAttributeGroups.concat(this.newAttributeGroups);

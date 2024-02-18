@@ -40,7 +40,7 @@ interface AttributeForm {
     attributeDisplayMode: FormControl<AttributeDisplayMode | undefined>;
     // addToNew: FormControl<AddToNewType | undefined>;
     attributeGroupId: FormControl<string | undefined>;
-    productClassId: FormControl<string | undefined>;
+    categoryId: FormControl<string | undefined>;
     productId: FormControl<string | undefined>;
     attributeOptions: FormArray<FormGroup<AttributeOptionForm>>;
 }
@@ -77,7 +77,7 @@ export class AttributeDetailsDialogComponent implements OnInit {
         attributeDisplayMode: this.fb.control<AttributeDisplayMode | undefined>(undefined),
         // addToNew: this.fb.control<AddToNewType | undefined>(undefined),
         attributeGroupId: this.fb.control<string | undefined>(undefined),
-        productClassId: this.fb.control<string | undefined>(undefined),
+        categoryId: this.fb.control<string | undefined>(undefined),
         productId: this.fb.control<string | undefined>(undefined),
         attributeOptions: this.fb.array<FormGroup<AttributeOptionForm>>([]),
     });
@@ -91,7 +91,7 @@ export class AttributeDetailsDialogComponent implements OnInit {
     }
 
     constructor(@Inject(MAT_DIALOG_DATA) public data: {
-        productClassId?: string,
+        categoryId?: string,
         attributeId?: string
     }, private dialogRef: MatDialogRef<AttributeDetailsDialogComponent, boolean>, private fb: NonNullableFormBuilder, private attributeService: AttributeService, private attributeGroupService: AttributeGroupService) {
 
@@ -114,9 +114,9 @@ export class AttributeDetailsDialogComponent implements OnInit {
     }
 
     ngOnInit(): void {
-        const {productClassId, attributeId} = this.data;
-        productClassId && this.attributeForm.controls.productClassId.setValue(productClassId);
-        this.attributeGroupService.findAllAttributeGroups(productClassId).subscribe(result => this.attributeGroups = result);
+        const {categoryId, attributeId} = this.data;
+        categoryId && this.attributeForm.controls.categoryId.setValue(categoryId);
+        this.attributeGroupService.findAllAttributeGroups(categoryId).subscribe(result => this.attributeGroups = result);
         if (attributeId) {
             this.attributeService.getAttribute(attributeId).subscribe(result => {
                 const attributeOptionSize = result.attributeOptions?.length;

@@ -2,7 +2,7 @@
     <div class="product-specific-attribute-container">
         <div class="title">
             <h2>产品私有属性</h2>
-            <button mat-raised-button [matMenuTriggerFor]="menu">添加属性
+            <button mat-raised-button type="button" [matMenuTriggerFor]="menu">添加属性
                 <mat-icon fontIcon="arrow_drop_down"></mat-icon>
             </button>
             <mat-menu #menu="matMenu">
@@ -21,38 +21,50 @@
                         @switch (attribute.controls.attributeType.value) {
                             <!-- select -->
                             @case ('SELECT') {
-                                <div formArrayName="attributeOptions">
-                                    @for (attributeOption of attribute.controls.attributeOptions?.controls;track attributeOptionIdx;let attributeOptionIdx=$index) {
-                                        <div class="attribute-option" [formGroupName]="attributeOptionIdx">
-                                            <input matNativeControl
-                                                   (blur)="checkbox.checked&&addAttributeOption(attribute)"
-                                                   placeholder="属性选项" formControlName="name">
-                                            @if (!$first) {
-                                                <mat-icon class="hide" fontIcon="delete"
-                                                          (click)="deleteAttributeOption(attributeIdx,attributeOptionIdx)"></mat-icon>
-                                            }
+                                <div formArrayName="attributeValueSelects">
+                                    @for (attributeValueSelect of attribute.controls.attributeValueSelects?.controls;track attributeValueIdx;let attributeValueIdx=$index) {
+                                        <div class="attribute-value-select" [formGroupName]="attributeValueIdx">
+                                            <div class="attribute-option" formGroupName="attributeOption">
+                                                <input matNativeControl
+                                                       (blur)="selectCheckbox.checked&&addAttributeValueSelect(attribute)"
+                                                       placeholder="属性选项" formControlName="name">
+                                                @if (!$first) {
+                                                    <mat-icon class="hide" fontIcon="delete"
+                                                              (click)="deleteAttributeValueSelect(attributeIdx,attributeValueIdx)"></mat-icon>
+                                                }
+                                            </div>
+
                                         </div>
                                     }
                                 </div>
-                                <mat-checkbox #checkbox [checked]="false"
-                                              [ngClass]="{'hide':!checkbox.checked}"
+                                <mat-checkbox #selectCheckbox
+                                              (change)="onAttributeValueSelectMultiValueChange($event,attribute)"
+                                              [checked]="false"
+                                              [ngClass]="{'hide':!selectCheckbox.checked}"
                                               aria-label="multiple value">
                                     多值
                                 </mat-checkbox>
                             }
                             <!--  checkbox -->
                             @case ('CHECKBOX') {
-                                @if (checkbox.checked) {
-                                    <input matNativeControl type="text" value="true" [readonly]="true">
-                                    <input matNativeControl type="text" value="false" [readonly]="true">
-                                } @else {
-                                    <select matNativeControl>
-                                        <option value="true" selected>是</option>
-                                        <option value="false">否</option>
-                                    </select>
-                                }
-
-                                <mat-checkbox #checkbox [checked]="false"
+                                <div formArrayName="attributeValueCheckboxes">
+                                    @for (attributeValueCheckbox of attribute.controls.attributeValueCheckboxes?.controls;track $index) {
+                                        <div class="attribute-value-checkbox" [formGroupName]="$index">
+                                            @if (checkbox.checked) {
+                                                <input matNativeControl type="text" formControlName="value"
+                                                       [readonly]="true">
+                                            } @else {
+                                                <select matNativeControl formControlName="value">
+                                                    <option value="true" selected>是</option>
+                                                    <option value="false">否</option>
+                                                </select>
+                                            }
+                                        </div>
+                                    }
+                                </div>
+                                <mat-checkbox #checkbox
+                                              (change)="onAttributeValueCheckboxMultiValueChange($event,attribute)"
+                                              [checked]="false"
                                               [ngClass]="{'hide':!checkbox.checked}"
                                               aria-label="multiple value">
                                     多值
@@ -60,7 +72,17 @@
                             }
                             <!--  text -->
                             @case ('TEXT') {
-                                <textarea matNativeControl placeholder="文本区"></textarea>
+                                <div class="attribute-value-text" formGroupName="attributeValueText">
+                                    <textarea matNativeControl placeholder="文本区" formControlName="value"
+                                              [readonly]="textCheckbox.checked"></textarea>
+                                </div>
+                                <mat-checkbox #textCheckbox [checked]="false"
+                                              (change)="onEditableChange($event,attribute)"
+                                              [ngClass]="{'hide':!textCheckbox.checked}"
+                                              aria-label="editable">
+                                    可编辑
+                                </mat-checkbox>
+
                             }
                         }
                         <mat-icon fontIcon="delete" (click)="deleteAttribute(attributeIdx)"></mat-icon>

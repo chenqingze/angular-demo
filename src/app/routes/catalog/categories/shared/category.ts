@@ -1,5 +1,4 @@
 import {Image} from '../../../../shared/models/file';
-import {ProductClass} from '../../attributes/shared/attribute';
 import {Product} from '../../products/shared/product';
 
 interface Category {
@@ -14,7 +13,6 @@ interface Category {
     path?: string
     depth?: number
     products?: Product[]
-    productClasses?: ProductClass[]
 }
 
 

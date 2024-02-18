@@ -33,7 +33,7 @@ import {NgStyle} from '@angular/common';
 })
 export class AttributeListComponent implements OnInit {
 
-    @Input() productClassId?: string;
+    @Input() categoryId?: string;
     @ViewChild(MatTable) table!: MatTable<Attribute>;
     // attributeDataSource: MatTableDataSource<Attribute> = new MatTableDataSource<Attribute>([]);
     displayedColumns: string[] = ['dragBox', 'name', 'attributeType', 'attributeDisplayMode', 'operate'];
@@ -44,12 +44,12 @@ export class AttributeListComponent implements OnInit {
 
     ngOnInit(): void {
         forkJoin([
-            this.attributeGroupService.findAllAttributeGroups(this.productClassId),
-            this.attributeService.findAttributes(this.productClassId)]
+            this.attributeGroupService.findAllAttributeGroups(this.categoryId),
+            this.attributeService.findAttributes(this.categoryId)]
         ).subscribe(([attributeGroups, attributes]) => {
             const nonGroup: AttributeGroup = {
                 id: undefined, name: '未分组', displayOrder: 0,
-                productClassId: this.productClassId
+                categoryId: this.categoryId
             }
             this.attributeGroups = [nonGroup, ...attributeGroups].map(group => {
                 const attributeGroup = {...group};
@@ -63,7 +63,7 @@ export class AttributeListComponent implements OnInit {
     }
 
     manageAttributeGroups() {
-        this.dialog.open(AttributeGroupsDialogComponent, {data: this.productClassId}).afterClosed().subscribe();
+        this.dialog.open(AttributeGroupsDialogComponent, {data: this.categoryId}).afterClosed().subscribe();
     }
 
     onDropped(event: CdkDragDrop<any, any>) {
@@ -73,14 +73,14 @@ export class AttributeListComponent implements OnInit {
     }
 
     addAttribute() {
-        // console.log(this.productClassId)
-        this.dialog.open(AttributeDetailsDialogComponent, {data: {productClassId: this.productClassId}})
+        // console.log(this.categoryId)
+        this.dialog.open(AttributeDetailsDialogComponent, {data: {categoryId: this.categoryId}})
             .afterClosed()
             .subscribe(result => result && this.ngOnInit());
     }
 
     editAttribute(attributeId: string) {
-        this.dialog.open(AttributeDetailsDialogComponent, {data: {productClassId: this.productClassId, attributeId}})
+        this.dialog.open(AttributeDetailsDialogComponent, {data: {categoryId: this.categoryId, attributeId}})
             .afterClosed()
             .subscribe(result => {
                 if (result) {

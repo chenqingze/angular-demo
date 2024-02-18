@@ -5,6 +5,7 @@ import {CategoryListComponent} from '../category-list/category-list.component';
 import {takeUntilDestroyed} from '@angular/core/rxjs-interop';
 import {filter} from 'rxjs';
 import {CategoryInfoComponent} from './category-info/category-info.component';
+import {AttributeListComponent} from '../../attributes/attribute-list/attribute-list.component';
 
 @Component({
     selector: 'app-category-details',
@@ -13,6 +14,7 @@ import {CategoryInfoComponent} from './category-info/category-info.component';
         MatTabsModule,
         CategoryListComponent,
         CategoryInfoComponent,
+        AttributeListComponent,
     ],
     templateUrl: './category-details.component.html',
     styleUrl: './category-details.component.scss'

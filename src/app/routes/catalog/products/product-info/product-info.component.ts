@@ -81,8 +81,10 @@ export class ProductInfoComponent implements OnInit {
     }
 
     private _filter(value: string): Category[] {
-        const filterValue = value.toLowerCase();
-        return this.allCategories.filter(category => category.name.toLowerCase().includes(filterValue));
+        const filterValue = value.toString().toLowerCase();
+        return this.allCategories.filter(category => {
+            category.name.toLowerCase().includes(filterValue)
+        });
     }
 
     ngOnInit(): void {
@@ -90,13 +92,12 @@ export class ProductInfoComponent implements OnInit {
             this.allCategories = result
             this.filteredCategories = this.categoryCtrl.valueChanges.pipe(
                 startWith(null),
-                map((categoryName: string | null) => (categoryName ? this._filter(categoryName) : this.allCategories.slice())),
+                map((categoryName: string | null) => (!!categoryName ? this._filter(categoryName) : this.allCategories.slice())),
             );
         });
 
         if (this.productId) {
             this.productService.getProduct(this.productId).subscribe(result => {
-
                 this.productForm.patchValue(result);
                 const {categoryIds = []} = result;
                 this.categories = this.allCategories.filter(category => categoryIds.includes(category.id!));
@@ -112,8 +113,13 @@ export class ProductInfoComponent implements OnInit {
         }
         this.categoriesInput.nativeElement.value = '';
         this.categoryCtrl.setValue(null);
+        this.productForm.markAsDirty();
     }
 
+    /**
+     * 添加并分配新分类
+     * @param event
+     */
     addCategory(event: MatChipInputEvent) {
         // todo:解决已存在的分类问题
         /* const value = (event.value || '').trim();
@@ -139,11 +145,15 @@ export class ProductInfoComponent implements OnInit {
             this.categoriesSub.next(this.categories);
             this.announcer.announce(`Removed ${this.allCategories.at(index)!.name}`);
         }
+        this.productForm.markAsDirty();
     }
 
     onSubmit() {
-        console.log(this.productForm.getRawValue());
         const product: Product = this.productForm.getRawValue();
-        this.productService.createProduct(product).subscribe(() => this.router.navigate(['/products']));
+        if (this.productId) {
+            this.productService.updateProduct(this.productId, product).subscribe(() => this.router.navigate(['/products']));
+        } else {
+            this.productService.createProduct(product).subscribe(() => this.router.navigate(['/products']));
+        }
     }
 }

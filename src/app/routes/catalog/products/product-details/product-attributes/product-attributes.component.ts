@@ -1,7 +1,7 @@
 import {Component, Input} from '@angular/core';
 import {MatButtonToggleModule} from '@angular/material/button-toggle';
 import {ProductSpecificAttributeComponent} from './product-specific-attribute/product-specific-attribute.component';
-import {ProductClassAttributeComponent} from './product-class-attribute/product-class-attribute.component';
+import {CategoryAttributeComponent} from './category-attribute/category-attribute.component';
 import {GlobalAttributeComponent} from './global-attribute/global-attribute.component';
 import {HiddenAttributeComponent} from './hidden-attribute/hidden-attribute.component';
 
@@ -11,7 +11,7 @@ import {HiddenAttributeComponent} from './hidden-attribute/hidden-attribute.comp
     imports: [
         MatButtonToggleModule,
         ProductSpecificAttributeComponent,
-        ProductClassAttributeComponent,
+        CategoryAttributeComponent,
         GlobalAttributeComponent,
         HiddenAttributeComponent
     ],

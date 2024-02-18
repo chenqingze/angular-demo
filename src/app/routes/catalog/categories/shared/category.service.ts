@@ -8,7 +8,7 @@ import {Category} from './category';
 })
 export class CategoryService {
 
-    readonly PATH = '/catalog/categories';
+    readonly PATH = '/categories';
 
     constructor(private httpClient: HttpClient) {
     }
@@ -38,7 +38,7 @@ export class CategoryService {
     }
 
     getAllSubcategories(parentCategoryId?: string): Observable<Category []> {
-        const path = parentCategoryId ? `${this.PATH}/${parentCategoryId}/subcategories` : `${this.PATH}/root/subcategories`
+        const path = parentCategoryId ? `${this.PATH}/${parentCategoryId}/subcategories` : `${this.PATH}/subcategories`
         return this.httpClient.get<Category []>(path);
     }
 

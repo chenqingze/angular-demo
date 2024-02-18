@@ -3,7 +3,6 @@ import {
     AttributeValueHidden,
     AttributeValueSelect,
     AttributeValueText,
-    ProductClass
 } from '../../attributes/shared/attribute';
 import {Image} from '../../../../shared/models/file';
 import {Brand} from '../../brands/shared/brand';
@@ -46,7 +45,6 @@ interface Product {
     activeEndAt?: any;
     brand?: Brand;
     categoryIds?: string [];
-    productClass?: ProductClass;
     attributeValueSelects?: AttributeValueSelect[];
     attributeValueCheckboxes?: AttributeValueCheckbox[];
     attributeValueTexts?: AttributeValueText[];

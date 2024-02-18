@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import {HttpClient} from '@angular/common/http';
+import {HttpClient, HttpParams} from '@angular/common/http';
 import {Observable} from 'rxjs';
 import {AttributeGroup} from './attribute';
 
@@ -8,7 +8,7 @@ import {AttributeGroup} from './attribute';
 })
 export class AttributeGroupService {
 
-    readonly PATH = '/catalog/attribute-groups';
+    readonly PATH = '/attribute-groups';
 
     constructor(private httpClient: HttpClient) {
     }
@@ -29,9 +29,9 @@ export class AttributeGroupService {
         return this.httpClient.get<AttributeGroup>(`${this.PATH}/${id}`);
     }
 
-    findAllAttributeGroups(productClassId?: string): Observable<AttributeGroup []> {
-        if (productClassId) {
-            return this.findAllProductClassAttributeGroups(productClassId);
+    findAllAttributeGroups(categoryId?: string): Observable<AttributeGroup []> {
+        if (categoryId) {
+            return this.findAllCategoryAttributeGroups(categoryId);
         }
         return this.findAllGlobalAttributeGroups();
     }
@@ -41,8 +41,9 @@ export class AttributeGroupService {
         return this.httpClient.get<AttributeGroup[]>(`${this.PATH}`);
     }
 
-    private findAllProductClassAttributeGroups(productClassId: string): Observable<AttributeGroup[]> {
-        return this.httpClient.get<AttributeGroup[]>(`/catalog/product-classes/${productClassId}/attribute-groups`);
+    private findAllCategoryAttributeGroups(categoryId: string): Observable<AttributeGroup[]> {
+        const params = new HttpParams().append('categoryId', categoryId);
+        return this.httpClient.get<AttributeGroup[]>(`${this.PATH}`, {params});
     }
 
 }

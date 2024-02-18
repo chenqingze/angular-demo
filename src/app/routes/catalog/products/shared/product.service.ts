@@ -9,7 +9,7 @@ import {Page} from '../../../../shared/models/page';
 })
 export class ProductService {
 
-    readonly PATH = '/catalog/products';
+    readonly PATH = '/products';
 
     constructor(private httpClient: HttpClient) {
     }

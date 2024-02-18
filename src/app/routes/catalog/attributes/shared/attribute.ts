@@ -11,14 +11,8 @@ interface AttributeGroup {
     id?: string;
     name: string;
     displayOrder: number;
-    productClassId?: string
+    categoryId?: string
     attributes?: Attribute [];
-}
-
-interface ProductClass {
-    id?: string;
-    name: string;
-    displayOrder: number;
 }
 
 interface AttributeOption {
@@ -36,7 +30,7 @@ interface Attribute {
     attributeDisplayMode?: AttributeDisplayMode;
     // addToNew?: AddToNewType;
     attributeGroupId?: string;
-    productClassId?: string;
+    categoryId?: string;
     productId?: string;
     attributeOptions?: AttributeOption [];
 }
@@ -45,43 +39,36 @@ type PriceModifierType = string | 'ABSOLUTE' | 'PERCENT';
 
 type WeightModifierType = string | 'ABSOLUTE' | 'PERCENT';
 
-interface WeightModifier {
-    weightModifierType?: WeightModifierType;
-    weightAdjustment?: string;
-}
-
-interface PriceModifier {
-    priceModifierType?: PriceModifierType;
-    priceAdjustment?: string;
-}
-
 interface AttributeValue {
     id?: string;
     attribute: Attribute;
     product?: Product;
 }
 
-interface AttributeValueSelect extends AttributeValue {
-    displayOrder: number;
+interface AttributeValueHidden extends AttributeValue {
     attributeOption: AttributeOption;
-    isDefault?: boolean;
-    weightModifier?: WeightModifier;
-    priceModifier?: PriceModifier;
-}
-
-interface AttributeValueCheckbox extends AttributeValue {
-    value?: boolean;
-    isDefault?: boolean;
-    weightModifier?: WeightModifier;
-    priceModifier?: PriceModifier;
 }
 
 interface AttributeValueText extends AttributeValue {
-    editable?: boolean;
+    value: string;
+    editable: boolean;
 }
 
-interface AttributeValueHidden extends AttributeValue {
+interface AttributeMultiValue extends AttributeValue {
+    isDefault: boolean;
+    priceModifierType?: PriceModifierType;
+    priceAdjustment?: string;
+    weightModifierType?: WeightModifierType;
+    weightAdjustment?: string;
+}
+
+interface AttributeValueSelect extends AttributeMultiValue {
+    displayOrder: number;
     attributeOption: AttributeOption;
+}
+
+interface AttributeValueCheckbox extends AttributeMultiValue {
+    value: boolean;
 }
 
 export {
@@ -93,14 +80,13 @@ export {
     AddToNewType,
     AttributeGroup,
     AttributeOption,
-    ProductClass,
     Attribute,
     PriceModifierType,
-    PriceModifier,
     WeightModifierType,
-    WeightModifier,
-    AttributeValueSelect,
-    AttributeValueCheckbox,
+    AttributeValue,
+    AttributeValueHidden,
     AttributeValueText,
-    AttributeValueHidden
+    AttributeMultiValue,
+    AttributeValueSelect,
+    AttributeValueCheckbox
 }

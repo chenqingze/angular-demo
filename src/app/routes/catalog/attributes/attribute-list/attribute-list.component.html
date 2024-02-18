@@ -1,6 +1,6 @@
 <!-- todo:处理头部，当全局属性和类别属性page header不相同，面包屑页层级不一样 -->
-@if (productClassId) {
-    <h1>这里是产品类别id：{{ productClassId }} ，todo：显示产品类别名称</h1>
+@if (categoryId) {
+    <h1>这里是产品类别id：{{ categoryId }} ，todo：显示产品类别名称</h1>
 }
 <div class="button-container">
     <button mat-raised-button type="button" (click)="addAttribute()" class="button">

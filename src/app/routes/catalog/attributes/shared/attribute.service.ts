@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import {HttpClient} from '@angular/common/http';
+import {HttpClient, HttpParams} from '@angular/common/http';
 import {Observable} from 'rxjs';
 import {Attribute} from './attribute';
 
@@ -8,7 +8,7 @@ import {Attribute} from './attribute';
 })
 export class AttributeService {
 
-    readonly PATH = '/catalog/attributes';
+    readonly PATH = '/attributes';
 
     constructor(private httpClient: HttpClient) {
     }
@@ -29,9 +29,9 @@ export class AttributeService {
         return this.httpClient.get<Attribute>(`${this.PATH}/${id}`);
     }
 
-    findAttributes(productClassId?: string): Observable<Attribute[]> {
-        if (productClassId) {
-            return this.findAllProductClassAttributes(productClassId);
+    findAttributes(categoryId?: string): Observable<Attribute[]> {
+        if (categoryId) {
+            return this.findAllCategoryAttributes(categoryId);
         }
         return this.findAllGlobalAttributes();
     }
@@ -40,8 +40,9 @@ export class AttributeService {
         return this.httpClient.get<Attribute[]>(`${this.PATH}`);
     }
 
-    private findAllProductClassAttributes(productClassId: string): Observable<Attribute[]> {
-        return this.httpClient.get<Attribute[]>(`/catalog/product-classes/${productClassId}/attributes`);
+    private findAllCategoryAttributes(categoryId: string): Observable<Attribute[]> {
+        const params = new HttpParams().append("categoryId", categoryId);
+        return this.httpClient.get<Attribute[]>(`${this.PATH}`, {params});
     }
 
 }
