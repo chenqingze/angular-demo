@@ -45,7 +45,7 @@ export class CategoryListComponent implements OnInit {
     }
 
     ngOnInit(): void {
-        this.categoryService.getAllSubcategories(this.parentCategoryId).subscribe((result) => {
+        this.categoryService.findAllSubcategories(this.parentCategoryId).subscribe((result) => {
             this.allCategories = result;
             this.categoryDataSource.data = this.allCategories;
             this.newCategories = [];

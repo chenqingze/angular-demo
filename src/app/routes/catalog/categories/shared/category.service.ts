@@ -33,11 +33,11 @@ export class CategoryService {
         return this.httpClient.get<Category>(`${this.PATH}/${id}`);
     }
 
-    getAllCategories(): Observable<Category []> {
+    findAllCategories(): Observable<Category []> {
         return this.httpClient.get<Category []>(this.PATH);
     }
 
-    getAllSubcategories(parentCategoryId?: string): Observable<Category []> {
+    findAllSubcategories(parentCategoryId?: string): Observable<Category []> {
         const path = parentCategoryId ? `${this.PATH}/${parentCategoryId}/subcategories` : `${this.PATH}/subcategories`
         return this.httpClient.get<Category []>(path);
     }

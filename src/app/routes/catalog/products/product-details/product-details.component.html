@@ -1,12 +1,12 @@
 <mat-tab-group mat-stretch-tabs="false" mat-align-tabs="start" #tabGroup>
     <mat-tab label="详情">
         <ng-template matTabContent>
-            <app-add-edit-product [productId]="productId"></app-add-edit-product>
+            <app-product-info [productId]="productId"></app-product-info>
         </ng-template>
     </mat-tab>
-    <mat-tab label="产品属性">
+    <mat-tab label="产品选项">
         <ng-template matTabContent>
-            <app-product-attributes [productId]="productId"></app-product-attributes>
+            <app-product-options></app-product-options>
         </ng-template>
     </mat-tab>
     <mat-tab label="库存">

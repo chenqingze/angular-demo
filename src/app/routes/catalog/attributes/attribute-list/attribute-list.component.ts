@@ -1,18 +1,14 @@
-import {Component, Input, OnInit, ViewChild} from '@angular/core';
+import {Attribute, Component, OnInit, ViewChild} from '@angular/core';
 import {MatButtonModule} from '@angular/material/button';
 import {MatIconModule} from '@angular/material/icon';
-import {MatTable, MatTableModule} from '@angular/material/table';
+import {MatTable, MatTableDataSource, MatTableModule} from '@angular/material/table';
 import {ReactiveFormsModule} from '@angular/forms';
-import {Attribute, AttributeGroup} from '../shared/attribute';
 import {MatSlideToggleModule} from '@angular/material/slide-toggle';
 import {MatDialog} from '@angular/material/dialog';
 import {AttributeDetailsDialogComponent} from '../attribute-details-dialog/attribute-details-dialog.component';
 import {AttributeService} from '../shared/attribute.service';
 import {CdkDrag, CdkDragDrop, CdkDropList, moveItemInArray} from '@angular/cdk/drag-drop';
 import {ActivatedRoute} from '@angular/router';
-import {AttributeGroupsDialogComponent} from '../attribute-groups-dialog/attribute-groups-dialog.component';
-import {AttributeGroupService} from '../shared/attribute-group.service';
-import {forkJoin} from 'rxjs';
 import {NgStyle} from '@angular/common';
 
 @Component({
@@ -33,37 +29,14 @@ import {NgStyle} from '@angular/common';
 })
 export class AttributeListComponent implements OnInit {
 
-    @Input() categoryId?: string;
     @ViewChild(MatTable) table!: MatTable<Attribute>;
-    // attributeDataSource: MatTableDataSource<Attribute> = new MatTableDataSource<Attribute>([]);
+    attributeDataSource: MatTableDataSource<Attribute> = new MatTableDataSource<Attribute>([]);
     displayedColumns: string[] = ['dragBox', 'name', 'attributeType', 'attributeDisplayMode', 'operate'];
-    attributeGroups: AttributeGroup [] = [];
 
-    constructor(private route: ActivatedRoute, private dialog: MatDialog, private attributeService: AttributeService, private attributeGroupService: AttributeGroupService) {
+    constructor(private route: ActivatedRoute, private dialog: MatDialog, private attributeService: AttributeService) {
     }
 
     ngOnInit(): void {
-        forkJoin([
-            this.attributeGroupService.findAllAttributeGroups(this.categoryId),
-            this.attributeService.findAttributes(this.categoryId)]
-        ).subscribe(([attributeGroups, attributes]) => {
-            const nonGroup: AttributeGroup = {
-                id: undefined, name: '未分组', displayOrder: 0,
-                categoryId: this.categoryId
-            }
-            this.attributeGroups = [nonGroup, ...attributeGroups].map(group => {
-                const attributeGroup = {...group};
-                const groupId = attributeGroup.id;
-                attributeGroup.attributes = attributes.filter(attribute => attribute.attributeGroupId == groupId);
-                return attributeGroup;
-            });
-        });
-
-
-    }
-
-    manageAttributeGroups() {
-        this.dialog.open(AttributeGroupsDialogComponent, {data: this.categoryId}).afterClosed().subscribe();
     }
 
     onDropped(event: CdkDragDrop<any, any>) {
@@ -73,14 +46,13 @@ export class AttributeListComponent implements OnInit {
     }
 
     addAttribute() {
-        // console.log(this.categoryId)
-        this.dialog.open(AttributeDetailsDialogComponent, {data: {categoryId: this.categoryId}})
+        this.dialog.open(AttributeDetailsDialogComponent)
             .afterClosed()
             .subscribe(result => result && this.ngOnInit());
     }
 
     editAttribute(attributeId: string) {
-        this.dialog.open(AttributeDetailsDialogComponent, {data: {categoryId: this.categoryId, attributeId}})
+        this.dialog.open(AttributeDetailsDialogComponent, {data: attributeId})
             .afterClosed()
             .subscribe(result => {
                 if (result) {

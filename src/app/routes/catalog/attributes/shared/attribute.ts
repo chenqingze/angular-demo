@@ -1,25 +1,16 @@
 import {Product} from '../../products/shared/product';
 
-const AttributeTypes = ['SELECT', 'CHECKBOX', 'TEXT', 'HIDDEN'] as const
+const AttributeTypes = ['LIST_OF_VALUES', 'FREE_FORM'] as const;
 type AttributeType = typeof AttributeTypes[number];
-const AttributeDisplayModes = ['BLOCKS', 'SELECT_BOX'] as const;
-type AttributeDisplayMode = typeof AttributeDisplayModes[number];
-const AddToNewTypes = ['YES', 'NO', 'YES_NO'] as const;
-type AddToNewType = typeof AddToNewTypes[number];
+const AttributeDataTypes = ['BOOLEAN', 'NUMBER', 'INTEGER', 'STRING', 'DATE'] as const;
+type AttributeDataType = typeof AttributeDataTypes[number];
 
-interface AttributeGroup {
-    id?: string;
-    name: string;
-    displayOrder: number;
-    categoryId?: string
-    attributes?: Attribute [];
-}
 
 interface AttributeOption {
     id?: string;
-    name: string;
+    value: string;
     displayOrder: number;
-    addToNew: boolean;
+    attributeId?: boolean;
 }
 
 interface Attribute {
@@ -27,66 +18,44 @@ interface Attribute {
     name: string;
     displayOrder: number;
     attributeType: AttributeType;
-    attributeDisplayMode?: AttributeDisplayMode;
-    // addToNew?: AddToNewType;
-    attributeGroupId?: string;
-    categoryId?: string;
-    productId?: string;
+    attributeDataType: AttributeDataType;
     attributeOptions?: AttributeOption [];
+}
+
+interface ProductAttribute {
+    id?: string;
+    displayOrder: number;
+    product: Product;
+    attribute: Attribute;
+    attributeOption: AttributeOption;
 }
 
 type PriceModifierType = string | 'ABSOLUTE' | 'PERCENT';
 
 type WeightModifierType = string | 'ABSOLUTE' | 'PERCENT';
 
-interface AttributeValue {
+
+interface ProductOption {
     id?: string;
+    displayOrder: number;
+    product: Product;
     attribute: Attribute;
-    product?: Product;
-}
-
-interface AttributeValueHidden extends AttributeValue {
     attributeOption: AttributeOption;
-}
-
-interface AttributeValueText extends AttributeValue {
-    value: string;
-    editable: boolean;
-}
-
-interface AttributeMultiValue extends AttributeValue {
-    isDefault: boolean;
     priceModifierType?: PriceModifierType;
     priceAdjustment?: string;
     weightModifierType?: WeightModifierType;
     weightAdjustment?: string;
 }
 
-interface AttributeValueSelect extends AttributeMultiValue {
-    displayOrder: number;
-    attributeOption: AttributeOption;
-}
-
-interface AttributeValueCheckbox extends AttributeMultiValue {
-    value: boolean;
-}
-
 export {
     AttributeTypes,
     AttributeType,
-    AttributeDisplayModes,
-    AttributeDisplayMode,
-    AddToNewTypes,
-    AddToNewType,
-    AttributeGroup,
+    AttributeDataTypes,
+    AttributeDataType,
     AttributeOption,
     Attribute,
+    ProductAttribute,
     PriceModifierType,
     WeightModifierType,
-    AttributeValue,
-    AttributeValueHidden,
-    AttributeValueText,
-    AttributeMultiValue,
-    AttributeValueSelect,
-    AttributeValueCheckbox
+    ProductOption
 }

@@ -1,7 +1,7 @@
 import {Component, ElementRef, Input, OnInit, ViewChild} from '@angular/core';
 import {AsyncPipe} from '@angular/common';
 import {FormControl, FormsModule, NonNullableFormBuilder, ReactiveFormsModule, Validators} from '@angular/forms';
-import {ImageInputComponent} from '../../../../shared/components/image-input/image-input.component';
+import {ImageInputComponent} from '../../../../../shared/components/image-input/image-input.component';
 import {MatAutocompleteModule, MatAutocompleteSelectedEvent} from '@angular/material/autocomplete';
 import {MatButtonModule} from '@angular/material/button';
 import {MatCardModule} from '@angular/material/card';
@@ -12,21 +12,21 @@ import {MatInputModule} from '@angular/material/input';
 import {MatOptionModule} from '@angular/material/core';
 import {MatSlideToggleModule} from '@angular/material/slide-toggle';
 import {NgxWigModule} from 'ngx-wig';
-import {NumericDirective} from '../../../../shared/directives/numeric.directive';
-import {PageFooterComponent} from '../../../../shared/components/page-footer/page-footer.component';
+import {NumericDirective} from '../../../../../shared/directives/numeric.directive';
+import {PageFooterComponent} from '../../../../../shared/components/page-footer/page-footer.component';
 import {COMMA, ENTER} from '@angular/cdk/keycodes';
 import {BehaviorSubject, map, Observable, startWith} from 'rxjs';
-import {Category} from '../../categories/shared/category';
-import {Image} from '../../../../shared/models/file';
+import {Category} from '../../../categories/shared/category';
+import {Image} from '../../../../../shared/models/file';
 import {LiveAnnouncer} from '@angular/cdk/a11y';
 import {Router} from '@angular/router';
-import {ProductService} from '../shared/product.service';
-import {CategoryService} from '../../categories/shared/category.service';
+import {ProductService} from '../../shared/product.service';
+import {CategoryService} from '../../../categories/shared/category.service';
 import {takeUntilDestroyed} from '@angular/core/rxjs-interop';
-import {Product} from '../shared/product';
+import {Product} from '../../shared/product';
 
 @Component({
-    selector: 'app-add-edit-product',
+    selector: 'app-product-info',
     standalone: true,
     imports: [
         AsyncPipe,
@@ -88,7 +88,7 @@ export class ProductInfoComponent implements OnInit {
     }
 
     ngOnInit(): void {
-        this.categoryService.getAllCategories().subscribe(result => {
+        this.categoryService.findAllCategories().subscribe(result => {
             this.allCategories = result
             this.filteredCategories = this.categoryCtrl.valueChanges.pipe(
                 startWith(null),

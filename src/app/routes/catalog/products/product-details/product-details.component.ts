@@ -20,8 +20,8 @@ import {AsyncPipe} from '@angular/common';
 import {NumericDirective} from '../../../../shared/directives/numeric.directive';
 import {CategoryListComponent} from '../../categories/category-list/category-list.component';
 import {MatTabsModule} from '@angular/material/tabs';
-import {ProductInfoComponent} from '../product-info/product-info.component';
-import {ProductAttributesComponent} from './product-attributes/product-attributes.component';
+import {ProductInfoComponent} from './product-info/product-info.component';
+import {ProductOptionsComponent} from './product-options/product-options.component';
 
 @Component({
     selector: 'app-product-details',
@@ -53,7 +53,7 @@ import {ProductAttributesComponent} from './product-attributes/product-attribute
         CategoryListComponent,
         MatTabsModule,
         ProductInfoComponent,
-        ProductAttributesComponent,
+        ProductOptionsComponent,
     ],
     templateUrl: './product-details.component.html',
     styleUrl: './product-details.component.scss'

@@ -1,0 +1,23 @@
+<form [formGroup]="productOptionsForm" novalidate (ngSubmit)="onSubmit()">
+    <mat-card>
+        <mat-card-header>
+            <mat-card-title>产品选项</mat-card-title>
+        </mat-card-header>
+        <mat-card-content class="content">
+            <div class="product-options" formArrayName="productOptions">
+                @for (productOption of productOptions.controls;track $index) {
+                    <app-product-option [formGroup]="productOption"
+                                        [filteredAttributes]="filteredAttributes"></app-product-option>
+                }
+            </div>
+        </mat-card-content>
+    </mat-card>
+    <page-footer>
+        <ng-container buttons>
+            <!--<button mat-raised-button type="button">取消</button>-->
+            <button mat-raised-button type="submit" color="primary"
+                    [disabled]="productOptionsForm.invalid||productOptionsForm.pristine">保存
+            </button>
+        </ng-container>
+    </page-footer>
+</form>

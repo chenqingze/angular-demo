@@ -29,20 +29,13 @@ export class AttributeService {
         return this.httpClient.get<Attribute>(`${this.PATH}/${id}`);
     }
 
-    findAttributes(categoryId?: string): Observable<Attribute[]> {
-        if (categoryId) {
-            return this.findAllCategoryAttributes(categoryId);
+    findAttributes(productClassId?: string): Observable<Attribute[]> {
+        if (productClassId) {
+            const params = new HttpParams().append("productClassId", productClassId);
+            return this.httpClient.get<Attribute[]>(`${this.PATH}`, {params});
         }
-        return this.findAllGlobalAttributes();
-    }
-
-    private findAllGlobalAttributes(): Observable<Attribute[]> {
         return this.httpClient.get<Attribute[]>(`${this.PATH}`);
-    }
 
-    private findAllCategoryAttributes(categoryId: string): Observable<Attribute[]> {
-        const params = new HttpParams().append("categoryId", categoryId);
-        return this.httpClient.get<Attribute[]>(`${this.PATH}`, {params});
     }
 
 }

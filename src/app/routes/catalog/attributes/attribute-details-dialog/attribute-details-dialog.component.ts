@@ -13,23 +13,15 @@ import {MatIconModule} from '@angular/material/icon';
 import {MatInputModule} from '@angular/material/input';
 import {MatSelectModule} from '@angular/material/select';
 import {FormArray, FormControl, FormGroup, NonNullableFormBuilder, ReactiveFormsModule} from '@angular/forms';
-import {
-    AttributeDisplayMode,
-    AttributeDisplayModes,
-    AttributeGroup,
-    AttributeType,
-    AttributeTypes,
-} from '../shared/attribute';
+import {AttributeDataType, AttributeDataTypes, AttributeType, AttributeTypes,} from '../shared/attribute';
 import {takeUntilDestroyed} from '@angular/core/rxjs-interop';
 import {CdkDrag, CdkDragDrop, CdkDropList, moveItemInArray} from '@angular/cdk/drag-drop';
 import {AttributeService} from '../shared/attribute.service';
-import {AttributeGroupService} from '../shared/attribute-group.service';
 
 interface AttributeOptionForm {
     id: FormControl<string | undefined>,
-    name: FormControl<string>,
+    value: FormControl<string>,
     displayOrder: FormControl<number>,
-    addToNew: FormControl<boolean>
 }
 
 interface AttributeForm {
@@ -37,11 +29,7 @@ interface AttributeForm {
     name: FormControl<string>,
     displayOrder: FormControl<number>
     attributeType: FormControl<AttributeType>;
-    attributeDisplayMode: FormControl<AttributeDisplayMode | undefined>;
-    // addToNew: FormControl<AddToNewType | undefined>;
-    attributeGroupId: FormControl<string | undefined>;
-    categoryId: FormControl<string | undefined>;
-    productId: FormControl<string | undefined>;
+    attributeDataType: FormControl<AttributeDataType>;
     attributeOptions: FormArray<FormGroup<AttributeOptionForm>>;
 }
 
@@ -66,19 +54,16 @@ interface AttributeForm {
     styleUrl: './attribute-details-dialog.component.scss'
 })
 export class AttributeDetailsDialogComponent implements OnInit {
+
     protected readonly AttributeTypes = AttributeTypes;
-    protected readonly AttributeDisplayModes = AttributeDisplayModes;
-    attributeGroups: AttributeGroup[] = [];
+    protected readonly AttributeDataTypes = AttributeDataTypes;
+
     attributeForm: FormGroup<AttributeForm> = this.fb.group<AttributeForm>({
         id: this.fb.control<string | undefined>(undefined),
         name: this.fb.control(''),
         displayOrder: this.fb.control(0),
-        attributeType: this.fb.control<AttributeType>('SELECT'),
-        attributeDisplayMode: this.fb.control<AttributeDisplayMode | undefined>(undefined),
-        // addToNew: this.fb.control<AddToNewType | undefined>(undefined),
-        attributeGroupId: this.fb.control<string | undefined>(undefined),
-        categoryId: this.fb.control<string | undefined>(undefined),
-        productId: this.fb.control<string | undefined>(undefined),
+        attributeType: this.fb.control<AttributeType>('LIST_OF_VALUES'),
+        attributeDataType: this.fb.control<AttributeDataType>('STRING'),
         attributeOptions: this.fb.array<FormGroup<AttributeOptionForm>>([]),
     });
 
@@ -90,35 +75,20 @@ export class AttributeDetailsDialogComponent implements OnInit {
         return this.attributeForm.controls.attributeOptions;
     }
 
-    constructor(@Inject(MAT_DIALOG_DATA) public data: {
-        categoryId?: string,
-        attributeId?: string
-    }, private dialogRef: MatDialogRef<AttributeDetailsDialogComponent, boolean>, private fb: NonNullableFormBuilder, private attributeService: AttributeService, private attributeGroupService: AttributeGroupService) {
-
+    constructor(@Inject(MAT_DIALOG_DATA) public attributeId: string | undefined, private dialogRef: MatDialogRef<AttributeDetailsDialogComponent, boolean>, private fb: NonNullableFormBuilder, private attributeService: AttributeService) {
         this.attributeType.valueChanges
             .pipe(takeUntilDestroyed())
             .subscribe(type => {
-                switch (type) {
-                    case "SELECT":
-                    case "HIDDEN":
-                        this.attributeOptions.clear();
-                        this.addAttributeOption();
-                        break;
-                    case "CHECKBOX":
-                    case "TEXT":
-                    default:
-                        this.attributeOptions.clear();
-
+                if (type === 'LIST_OF_VALUES') {
+                    this.attributeOptions.clear();
+                    this.addAttributeOption();
                 }
             });
     }
 
     ngOnInit(): void {
-        const {categoryId, attributeId} = this.data;
-        categoryId && this.attributeForm.controls.categoryId.setValue(categoryId);
-        this.attributeGroupService.findAllAttributeGroups(categoryId).subscribe(result => this.attributeGroups = result);
-        if (attributeId) {
-            this.attributeService.getAttribute(attributeId).subscribe(result => {
+        if (this.attributeId) {
+            this.attributeService.getAttribute(this.attributeId).subscribe(result => {
                 const attributeOptionSize = result.attributeOptions?.length;
                 if (attributeOptionSize) {
                     this.attributeOptions.clear();
@@ -137,9 +107,8 @@ export class AttributeDetailsDialogComponent implements OnInit {
     newAttributeOption(displayOrder = 0) {
         return this.fb.group({
             id: this.fb.control<string | undefined>(undefined),
-            name: this.fb.control(''),
+            value: this.fb.control(''),
             displayOrder: this.fb.control(displayOrder),
-            addToNew: this.fb.control(false)
         });
     }
 
