@@ -15,14 +15,12 @@ import {NgxWigModule} from 'ngx-wig';
 import {NumericDirective} from '../../../../../shared/directives/numeric.directive';
 import {PageFooterComponent} from '../../../../../shared/components/page-footer/page-footer.component';
 import {COMMA, ENTER} from '@angular/cdk/keycodes';
-import {BehaviorSubject, map, Observable, startWith} from 'rxjs';
 import {Category} from '../../../categories/shared/category';
 import {Image} from '../../../../../shared/models/file';
 import {LiveAnnouncer} from '@angular/cdk/a11y';
 import {Router} from '@angular/router';
 import {ProductService} from '../../shared/product.service';
 import {CategoryService} from '../../../categories/shared/category.service';
-import {takeUntilDestroyed} from '@angular/core/rxjs-interop';
 import {Product} from '../../shared/product';
 
 @Component({
@@ -52,12 +50,12 @@ import {Product} from '../../shared/product';
 export class ProductInfoComponent implements OnInit {
     @Input() productId: string | undefined;
     separatorKeysCodes: number[] = [ENTER, COMMA];
-    filteredCategories!: Observable<Category []>;
+    allCategories: Category [] = [];
+    filteredCategories: Category [] = [];
+    selectedCategories: Category [] = [];
     categoryCtrl = new FormControl('');
     @ViewChild('categoriesInput') categoriesInput!: ElementRef<HTMLInputElement>;
-    categories: Category [] = [];
-    categoriesSub = new BehaviorSubject<Category[]>(this.categories);
-    allCategories: Category [] = [];
+
     productForm = this.fb.group({
         id: this.fb.control<string | undefined>(undefined),
         name: this.fb.control<string>('', Validators.required),
@@ -74,14 +72,10 @@ export class ProductInfoComponent implements OnInit {
 
 
     constructor(private fb: NonNullableFormBuilder, private announcer: LiveAnnouncer, private router: Router, private productService: ProductService, private categoryService: CategoryService) {
-        this.categoriesSub.pipe(takeUntilDestroyed()).subscribe((categories) => {
-            const categoryIds = categories.map(category => category.id!);
-            this.productForm.controls.categoryIds.setValue(categoryIds, {emitEvent: false});
-        });
     }
 
-    private _filter(value: string): Category[] {
-        const filterValue = value.toString().toLowerCase();
+    private _categoriesFilter(categoryNam: string): Category[] {
+        const filterValue = categoryNam.toString().toLowerCase();
         return this.allCategories.filter(category => {
             category.name.toLowerCase().includes(filterValue)
         });
@@ -89,31 +83,19 @@ export class ProductInfoComponent implements OnInit {
 
     ngOnInit(): void {
         this.categoryService.findAllCategories().subscribe(result => {
-            this.allCategories = result
-            this.filteredCategories = this.categoryCtrl.valueChanges.pipe(
-                startWith(null),
-                map((categoryName: string | null) => (!!categoryName ? this._filter(categoryName) : this.allCategories.slice())),
-            );
+            this.allCategories = result;
+            if (this.productId) {
+                this.productService.getProduct(this.productId).subscribe(result => {
+                    this.productForm.patchValue(result);
+                    const {categoryIds = []} = result;
+                    this.selectedCategories = this.allCategories.filter(category => categoryIds.includes(category.id!));
+                    this.filteredCategories = this.allCategories.filter(category => !categoryIds.includes(category.id!))
+                });
+            }
+
         });
+        this.categoryCtrl.valueChanges.subscribe(categoryName => this.filteredCategories = !!categoryName ? this._categoriesFilter(categoryName) : this.allCategories.slice());
 
-        if (this.productId) {
-            this.productService.getProduct(this.productId).subscribe(result => {
-                this.productForm.patchValue(result);
-                const {categoryIds = []} = result;
-                this.categories = this.allCategories.filter(category => categoryIds.includes(category.id!));
-            });
-        }
-    }
-
-    selected(event: MatAutocompleteSelectedEvent): void {
-
-        if (!this.categories.includes(event.option.value)) {
-            this.categories.push(event.option.value);
-            this.categoriesSub.next(this.categories);
-        }
-        this.categoriesInput.nativeElement.value = '';
-        this.categoryCtrl.setValue(null);
-        this.productForm.markAsDirty();
     }
 
     /**
@@ -127,7 +109,7 @@ export class ProductInfoComponent implements OnInit {
          // Add our fruit
          if (value) {
              this.categoryService.createCategoryWithReturnCategoryItem({name: value}).subscribe(newCategory => {
-                 this.categories.push(newCategory);
+                 this.selectedCategories.push(newCategory);
                  this.allCategories.push(newCategory);
              });
          }
@@ -138,14 +120,31 @@ export class ProductInfoComponent implements OnInit {
          this.categoryCtrl.setValue(null);*/
     }
 
+    selectedCategory(event: MatAutocompleteSelectedEvent): void {
+
+        if (!this.selectedCategories.includes(event.option.value)) {
+            this.selectedCategories.push(event.option.value);
+            this.updateCategoryIdsControl();
+        }
+        this.categoriesInput.nativeElement.value = '';
+        this.categoryCtrl.setValue(null);
+        this.productForm.markAsDirty();
+    }
+
+
     removeCategory(category: Category) {
-        const index = this.categories.indexOf(category);
+        const index = this.selectedCategories.indexOf(category);
         if (index >= 0) {
-            this.categories.splice(index, 1);
-            this.categoriesSub.next(this.categories);
+            this.selectedCategories.splice(index, 1);
+            this.updateCategoryIdsControl();
             this.announcer.announce(`Removed ${this.allCategories.at(index)!.name}`);
         }
         this.productForm.markAsDirty();
+    }
+
+    updateCategoryIdsControl() {
+        const categoryIds = this.selectedCategories.map(category => category.id!);
+        this.productForm.controls.categoryIds.setValue(categoryIds, {emitEvent: false});
     }
 
     onSubmit() {

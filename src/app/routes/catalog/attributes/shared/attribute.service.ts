@@ -13,8 +13,8 @@ export class AttributeService {
     constructor(private httpClient: HttpClient) {
     }
 
-    createAttribute(attribute: Attribute): Observable<void> {
-        return this.httpClient.post<void>(this.PATH, attribute);
+    createAttribute(attribute: Attribute): Observable<Attribute> {
+        return this.httpClient.post<Attribute>(this.PATH, attribute);
     }
 
     deleteAttribute(id: string): Observable<void> {
@@ -35,7 +35,6 @@ export class AttributeService {
             return this.httpClient.get<Attribute[]>(`${this.PATH}`, {params});
         }
         return this.httpClient.get<Attribute[]>(`${this.PATH}`);
-
     }
 
 }

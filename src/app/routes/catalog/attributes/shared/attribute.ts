@@ -30,22 +30,6 @@ interface ProductAttribute {
     attributeOption: AttributeOption;
 }
 
-type PriceModifierType = string | 'ABSOLUTE' | 'PERCENT';
-
-type WeightModifierType = string | 'ABSOLUTE' | 'PERCENT';
-
-
-interface ProductOption {
-    id?: string;
-    displayOrder: number;
-    product: Product;
-    attribute: Attribute;
-    attributeOption: AttributeOption;
-    priceModifierType?: PriceModifierType;
-    priceAdjustment?: string;
-    weightModifierType?: WeightModifierType;
-    weightAdjustment?: string;
-}
 
 export {
     AttributeTypes,
@@ -55,7 +39,5 @@ export {
     AttributeOption,
     Attribute,
     ProductAttribute,
-    PriceModifierType,
-    WeightModifierType,
-    ProductOption
+
 }

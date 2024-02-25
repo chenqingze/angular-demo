@@ -27,7 +27,7 @@
             <mat-form-field class="example-chip-list">
                 <mat-label>产品分类</mat-label>
                 <mat-chip-grid #categoriesChipGrid aria-label="Categories selection">
-                    @for (category of categories;track category.id) {
+                    @for (category of selectedCategories;track category.id) {
                         <mat-chip-row (removed)="removeCategory(category)">
                             {{ category.name }}
                             <button matChipRemove [attr.aria-label]="'remove ' + category.name">
@@ -36,13 +36,14 @@
                         </mat-chip-row>
                     }
                 </mat-chip-grid>
-                <input placeholder="新分类..." #categoriesInput [formControl]="categoryCtrl"
+                <input placeholder="新分类..." #categoriesInput
                        [matChipInputFor]="categoriesChipGrid"
                        [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
                        (matChipInputTokenEnd)="addCategory($event)"
-                       [matAutocomplete]="auto"/>
-                <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selected($event)">
-                    @for (category of filteredCategories | async;track category.id) {
+                       [matAutocomplete]="auto"
+                       [formControl]="categoryCtrl"/>
+                <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selectedCategory($event)">
+                    @for (category of filteredCategories;track category.id) {
                         <mat-option [value]="category">{{ category.name }}</mat-option>
                     }
                 </mat-autocomplete>

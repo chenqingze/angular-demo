@@ -1,6 +1,6 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, Input, OnInit} from '@angular/core';
 import {AsyncPipe} from '@angular/common';
-import {FormGroup, FormsModule, NonNullableFormBuilder, ReactiveFormsModule} from '@angular/forms';
+import {FormArray, FormGroup, FormsModule, NonNullableFormBuilder, ReactiveFormsModule} from '@angular/forms';
 import {ImageInputComponent} from '../../../../../shared/components/image-input/image-input.component';
 import {MatAutocompleteModule} from '@angular/material/autocomplete';
 import {MatButtonModule} from '@angular/material/button';
@@ -14,12 +14,11 @@ import {MatSlideToggleModule} from '@angular/material/slide-toggle';
 import {NgxWigModule} from 'ngx-wig';
 import {NumericDirective} from '../../../../../shared/directives/numeric.directive';
 import {PageFooterComponent} from '../../../../../shared/components/page-footer/page-footer.component';
-import {Attribute, AttributeTypes} from '../../../attributes/shared/attribute';
-import {map, Observable, startWith} from 'rxjs';
+import {AttributeTypes} from '../../../attributes/shared/attribute';
 import {MatSelectModule} from '@angular/material/select';
 import {ProductOptionComponent} from './product-option/product-option.component';
-import {ProductOptionForm} from '../../shared/product';
-import {AttributeService} from '../../../attributes/shared/attribute.service';
+import {ProductOptionForm} from './shared/product-option';
+import {ProductOptionService} from './shared/product-option.service';
 
 
 @Component({
@@ -49,42 +48,52 @@ import {AttributeService} from '../../../attributes/shared/attribute.service';
     styleUrl: './product-options.component.scss'
 })
 export class ProductOptionsComponent implements OnInit {
+
     protected readonly AttributeTypes = AttributeTypes;
-    allAttributes: Attribute[] = [];
-    filteredAttributes!: Observable<Attribute []>;
-    existedAttributes: Attribute[] = [];
+
+    @Input({required: true}) productId!: string;
+
     productOptionsForm = this.fb.group({
         productOptions: this.fb.array<FormGroup<ProductOptionForm>>([])
     });
 
-    get productOptions() {
+
+    constructor(private fb: NonNullableFormBuilder, private productOptionService: ProductOptionService) {
+    }
+
+
+    get productOptions(): FormArray<FormGroup<ProductOptionForm>> {
         return this.productOptionsForm.controls.productOptions;
     }
 
-    constructor(private fb: NonNullableFormBuilder, private attributeService: AttributeService) {
-
+    get attributeIds() {
+        return this.productOptions.value.map(value => value.attributeId!);
     }
 
-    /* private _filter(value: string): Category[] {
-         const filterValue = value.toString().toLowerCase();
-         return this.allAttributes.filter(attribute => {
-             category.name.toLowerCase().includes(filterValue)
-         });
-     }*/
-
     ngOnInit(): void {
-        this.productOptions.valueChanges.pipe(
-            startWith(null),
-            map(value => {
-                console.log(value);
-                return value;
-            }),
-        );
-        this.attributeService.findAttributes().subscribe();
+        this.productOptions.valueChanges.subscribe(value => {
+            this.productOptionService.filterSelectedAttribute(this.attributeIds);
+        });
+        this.productOptionService.loadAllAttributes(() => this.addProductOption());
+    }
+
+    addProductOption() {
+        const newProductOptions = this.fb.group<ProductOptionForm>({
+            attributeId: this.fb.control(undefined),
+            attributeOptionIds: this.fb.control(undefined),
+            displayOrder: this.fb.control(0),
+            productId: this.fb.control(this.productId)
+        });
+        this.productOptions.push(newProductOptions);
+    }
+
+    removeProductOption(index: number) {
+        this.productOptions.removeAt(index);
     }
 
     onSubmit() {
-
+        console.log(this.productOptionsForm.getRawValue());
     }
+
 
 }
